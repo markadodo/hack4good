@@ -40,3 +40,153 @@ a {
     color-scheme: dark;
   }
 }
+
+/* Reset & base styles */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: #1e40af;
+  padding: 16px 32px;
+  display: flex;
+  gap: 24px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  align-items: center;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navbar a:hover {
+  color: #facc15;
+}
+
+/* Page container */
+.page {
+  padding: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Login page */
+.login-container {
+  max-width: 400px;
+  margin: 80px auto;
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.login-container h1 {
+  margin-bottom: 24px;
+  color: #1e40af;
+}
+
+.login-container button {
+  width: 80%;
+  margin: 12px 0;
+}
+
+/* Buttons */
+button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: linear-gradient(90deg, #1e3a8a, #2563eb);
+  color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Input fields */
+input, select {
+  padding: 10px 14px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Event cards */
+.event-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.registered {
+  border-left: 6px solid #2563eb;
+}
+
+.full {
+  border-left: 6px solid #ef4444;
+}
+
+/* Labels */
+label {
+  font-weight: 500;
+  display: block;
+  margin: 16px 0 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .page {
+    padding: 16px;
+  }
+
+  .login-container {
+    margin: 40px 16px;
+    padding: 24px;
+  }
+
+  .event-card {
+    padding: 16px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
