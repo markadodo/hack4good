@@ -9,6 +9,7 @@ type User struct {
 	Role           string    `json:"role"`
 	MembershipType int       `json:"membership_type"`
 	CreatedAt      time.Time `json:"created_at"`
+	LastActive     time.Time `json:"last_active"` //newly added
 }
 
 type CreateUserInput struct {

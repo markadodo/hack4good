@@ -144,3 +144,25 @@ func DeleteUserByIDHandler(db *sql.DB) gin.HandlerFunc {
 		c.JSON(200, gin.H{"status": "User deleted"})
 	}
 }
+
+func ReadAllUsersHandler(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// 1. Call the database helper to get the list of users
+		users, err := database.ReadAllUsers(db)
+
+		if err != nil {
+			// Log the error for internal debugging
+			c.JSON(500, gin.H{"error": "Failed to fetch users from database"})
+			return
+		}
+
+		// 2. Return the data as JSON
+		// If the list is empty, it will return an empty array []
+		if users == nil {
+			c.JSON(200, []models.User{})
+			return
+		}
+
+		c.JSON(200, users)
+	}
+}
