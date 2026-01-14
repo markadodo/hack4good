@@ -1,0 +1,63 @@
+.calendar-container {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.calendar-header button {
+    background: #0b5ed7;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.calendar-day-name {
+    text-align: center;
+    font-weight: bold;
+    padding: 6px 0;
+    color: #555;
+}
+
+.calendar-day-box {
+    height: 60px;
+    background: #f7f7f7;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.calendar-day-box:hover {
+    background: #e0e7ff;
+    transform: translateY(-2px);
+}
+
+.calendar-day-box.booked {
+    background: #0b5ed7;
+    color: white;
+    font-weight: bold;
+}
+
+.calendar-day-box.empty {
+    background: transparent;
+    cursor: default;
+}
