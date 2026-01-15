@@ -55,15 +55,16 @@ func main() {
 	test := gin.Default()
 
 	test.POST("/login", handlers.LoginHandler(db))
-	test.GET("/topics/:topic_id/posts", handlers.ReadPostByTopicIDHandler(db))
+	//test.GET("/topics/:topic_id/posts", handlers.ReadPostByTopicIDHandler(db))
 	test.POST("/users", handlers.CreateUserHandler(db))
-	test.GET("/topics/:topic_id/posts/search", handlers.ReadPostBySearchQueryHandler(db))
-	test.GET("/posts", handlers.ReadPostHandler(db))
+	//test.GET("/topics/:topic_id/posts/search", handlers.ReadPostBySearchQueryHandler(db))
+	//test.GET("/posts", handlers.ReadPostHandler(db))
 
 	r := test.Group("/logged_in")
 
 	r.Use(middleware.JWTAuthorisation())
 	{
+		r.POST("/activities", handlers.CreateActivityHandler(db))
 	}
 
 	test.Run(":8080")

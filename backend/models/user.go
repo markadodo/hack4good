@@ -9,21 +9,26 @@ type User struct {
 	Role           string    `json:"role"`
 	MembershipType int       `json:"membership_type"`
 	CreatedAt      time.Time `json:"created_at"`
+	LastActive     time.Time `json:"lastActive_at"`
 }
 
 type CreateUserInput struct {
-	Username       string `json:"username" binding:"required"`
-	PasswordHash   string `json:"password_hash" binding:"required"`
-	Role           string `json:"role" binding:"required"`
-	MembershipType int    `json:"membership_type" binding:"required"`
+	ID             int64  `json:"id"`
+	Username       string `json:"username"`
+	PasswordHash   string `json:"password_hash"`
+	Role           string `json:"role"`
+	MembershipType int    `json:"membership_type"`
 }
 
-// type UpdateUserInput struct {
-//     Name           *string `json:"name"`
-//     PasswordHash   *string `json:"password_hash"`
-//     Role           *string `json:"role"`
-//     MembershipType *int    `json:"membership_type"`
-// }
+type UpdateUserInput struct {
+	ID             *int64     `json:"id"`
+	Username       *string    `json:"username"`
+	PasswordHash   *string    `json:"password_hash"`
+	Role           *string    `json:"role"`
+	MembershipType *int       `json:"membership_type"`
+	CreatedAt      *time.Time `json:"created_at"`
+	LastActive     *time.Time `json:"lastActive_at"`
+}
 
 type LoginUserData struct {
 	Username string `json:"username" binding:"required"`

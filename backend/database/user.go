@@ -11,7 +11,7 @@ import (
 
 func CreateUser(db *sql.DB, user *models.User) error {
 
-	hash, hashingErr := utils.HashingPassword(user.Password)
+	hash, hashingErr := utils.HashingPassword(user.PasswordHash)
 
 	if hashingErr != nil {
 		return hashingErr
@@ -42,7 +42,7 @@ func CreateUser(db *sql.DB, user *models.User) error {
 		return err
 	}
 
-	user.Password = ""
+	//user.Password = ""
 	user.PasswordHash = ""
 
 	return nil
@@ -109,9 +109,9 @@ func UpdateUserByID(db *sql.DB, id int64, input *models.UpdateUserInput) (bool, 
 		counter += 1
 	}
 
-	if input.Password != nil {
+	if input.PasswordHash != nil {
 		placeholder := strconv.Itoa(counter)
-		hash, err := utils.HashingPassword(*input.Password)
+		hash, err := utils.HashingPassword(*input.PasswordHash)
 		if err != nil {
 			return false, false, err
 		}

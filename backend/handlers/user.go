@@ -19,14 +19,17 @@ func CreateUserHandler(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		if input.Username == "" || input.Password == "" {
+		if input.Username == "" || input.PasswordHash == "" {
 			c.JSON(400, gin.H{"error": "empty fields"})
 			return
 		}
 
+		// Map the input to the main User model
 		user := models.User{
-			Password: input.Password,
-			Username: input.Username,
+			Username:       input.Username,
+			PasswordHash:   input.PasswordHash,   // Corrected from .Password to .PasswordHash
+			Role:           input.Role,           // Include the Role from the input
+			MembershipType: input.MembershipType, // Include MembershipType
 		}
 
 		if err := database.CreateUser(db, &user); err != nil {
@@ -92,7 +95,7 @@ func UpdateUserByIDHandler(db *sql.DB) gin.HandlerFunc {
 			c.JSON(400, gin.H{"error": "Username cannot be empty"})
 			return
 		}
-		if input.Password != nil && *input.Password == "" {
+		if input.PasswordHash != nil && *input.PasswordHash == "" {
 			c.JSON(400, gin.H{"error": "Password cannot be empty"})
 			return
 		}
