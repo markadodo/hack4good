@@ -19,24 +19,23 @@ func CreateUserHandler(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		if input.Username == "" || input.Password == "" {
-			c.JSON(400, gin.H{"error": "empty fields"})
+		if input.Username == "" || input.Password == "" || input.Role == "" || input.MembershipType < 0 || input.MembershipType > 4 {
+			c.JSON(400, gin.H{"error": "Invalid fields"})
 			return
 		}
 
-		user := models.User{
-			Password: input.Password,
-			Username: input.Username,
+		if input.Role != "participant" && input.Role != "staff" && input.Role != "volunteer" {
+			c.JSON(400, gin.H{"error": "Invalid role"})
+			return
 		}
 
-		if err := database.CreateUser(db, &user); err != nil {
+		if err := database.CreateUser(db, &input); err != nil {
 			c.JSON(500, gin.H{"error": "Could not create user"})
 			return
 		}
 
 		c.JSON(201, gin.H{
-			"id":       user.ID,
-			"username": user.Username,
+			"status": "User created successfully",
 		})
 	}
 }
@@ -52,7 +51,7 @@ func ReadUserByIDHandler(db *sql.DB) gin.HandlerFunc {
 		}
 
 		user, err2 := database.ReadUserByID(db, id)
-		//consider emptying the passwordhash field
+
 		if err2 != nil {
 			c.JSON(500, gin.H{"error": "Internal server error"})
 			return
@@ -64,10 +63,11 @@ func ReadUserByIDHandler(db *sql.DB) gin.HandlerFunc {
 		}
 
 		c.JSON(200, gin.H{
-			"id":          user.ID,
-			"username":    user.Username,
-			"created_at":  user.CreatedAt,
-			"last_active": user.LastActive,
+			"id":              user.ID,
+			"username":        user.Username,
+			"role":            user.Role,
+			"membership_type": user.MembershipType,
+			"created_at":      user.CreatedAt,
 		})
 	}
 }
@@ -96,9 +96,12 @@ func UpdateUserByIDHandler(db *sql.DB) gin.HandlerFunc {
 			c.JSON(400, gin.H{"error": "Password cannot be empty"})
 			return
 		}
+		if input.MembershipType != nil && !(*input.MembershipType >= 0 && *input.MembershipType <= 4) {
+			c.JSON(400, gin.H{"error": "Invalid membership type"})
+			return
+		}
 
 		empty_update, user_not_found, err := database.UpdateUserByID(db, id, &input)
-		//consider emptying the password field
 
 		if err != nil {
 			c.JSON(500, gin.H{"error": "Could not update user"})
@@ -115,7 +118,7 @@ func UpdateUserByIDHandler(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(200, gin.H{"status": "Updated successfully"})
+		c.JSON(200, gin.H{"status": "User updated successfully"})
 	}
 }
 
@@ -141,6 +144,6 @@ func DeleteUserByIDHandler(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(200, gin.H{"status": "User deleted"})
+		c.JSON(200, gin.H{"status": "User deleted successfully"})
 	}
 }
