@@ -1,48 +1,28 @@
 'use client';
 
 import { useState } from "react";
-import eventsData from "../data/events";
-import axios from "axios"; //run 'npm install axios'
-import AddButtonForm from "./Addbuttonform"; //take note
-import AdminCalendar from "./AdminCalendar"; //take note //npm install @fullcalendar/react @fullcalendar/daygrid @fullcalendar/interaction axios
+import axios from "axios";
+import { Users, Calendar as CalIcon, Plus, LayoutDashboard, Database, Download } from "lucide-react"; //npm install lucid-react
+import AddButtonForm from "./Addbuttonform";
+import AdminCalendar from "./AdminCalendar";
 
 export default function Admin() {
-  const [events, setEvents] = useState(eventsData);
-  const [name, setName] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [location, setLocation] = useState("");
-  const [slots, setSlots] = useState(1);
-
-  //For the 'Add Event' button
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    location: "",
-    meetup_location: "", 
-    start_time: "",
-    end_time: "",
-    wheelchair_access: false,
-    payment_required: false,
-    participant_vacancy: 0,
-    volunteer_vacancy: 0,
-    created_by: 1 // Example ID
-  });
-  //for Calendar related 
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [formData, setFormData] = useState({
+    title: "", description: "", location: "", meetup_location: "",
+    start_time: "", end_time: "", wheelchair_access: false,
+    payment_required: false, participant_vacancy: 0, volunteer_vacancy: 0,
+    created_by: 1
+  });
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
   const submitEvent = async () => {
     try {
-      // Prepare data for backend (converting string to array for MeetupLocation)
       const payload = {
         ...formData,
         meetup_location: formData.meetup_location.split(",").map(s => s.trim()),
@@ -51,89 +31,90 @@ export default function Admin() {
         start_time: new Date(formData.start_time).toISOString(),
         end_time: new Date(formData.end_time).toISOString(),
       };
-
-      // API call to your backend
       await axios.post("http://localhost:8080/logged_in/admin/activities", payload, { withCredentials: true });
-      
-      setIsModalOpen(false); // Close modal on success
-      alert("Activity Created!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to create activity");
-    }
+      setIsModalOpen(false);
+      setRefreshTrigger(prev => prev + 1);
+    } catch (err) { alert("Error creating activity"); }
   };
 
-
-  
-
   return (
-    <div className="page">
-      <h1>Admin Dashboard</h1>
+    <div style={layoutStyle}>
+      {/* SIDEBAR */}
+      <aside style={sidebarStyle}>
+        <div style={{ padding: '20px', fontWeight: '800', fontSize: '1.2rem', color: '#fff' }}>HACK4GOOD</div>
+        <nav style={navStyle}>
+          <div style={activeNavItem}><LayoutDashboard size={20} /> Dashboard</div>
+          <div style={navItem} onClick={() => window.location.href = '/admin/users'}>
+            <Users size={20} /> Manage Accounts
+          </div>
+          <div style={navItem}><Database size={20} /> Database Logs</div>
+        </nav>
+      </aside>
 
-      <div style={{ 
-        display: 'flex', 
-        gap: '20px', 
-        marginBottom: '30px',
-        alignItems: 'stretch', // Ensures both boxes have the same height
-        position: 'relative', // Add this
-        zIndex: 1
-      }}>
-        
-        {/* Analytics Box */}
-        <div className="event-card" style={{ flex: 1, margin: 0 }}>
-          <h2>Analytics</h2>
-          <p>Total Events: {events.length}</p>
-          <p>Total Registrations: {events.reduce((sum, e) => sum + (e.registered || 0), 0)}</p>
-          <p>Popular Event: {events.sort((a, b) => (b.registered || 0) - (a.registered || 0))[0]?.name || "None"}</p>
-        </div>
-
-        {/* Add Event Box */}
-        <div className="event-card" style={{ flex: 1, margin: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <h2>Click to add Event</h2> 
-          
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            style={{ padding: '20px 30px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
-          >
-            + Add Event
+      {/* MAIN CONTENT */}
+      <main style={mainContentStyle}>
+        <header style={headerStyle}>
+          <div>
+            <h1 style={{ margin: 0, color: '#1e293b' }}>Admin Overview</h1>
+            <p style={{ color: '#64748b' }}>Manage your community activities and users.</p>
+          </div>
+          <button onClick={() => setIsModalOpen(true)} style={primaryBtnStyle}>
+            <Plus size={18} /> Create New Activity
           </button>
+        </header>
 
-          <AddButtonForm 
-            isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)} 
-            formData={formData}
-            onChange={handleInputChange}
-            onSubmit={submitEvent}
-          />
-         
-       </div>
-      </div>
-
-      <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', marginBottom: '40px' }}>
-        <h2 style={{ marginBottom: '20px' }}>Activity Calendar</h2>
-        <AdminCalendar refreshTrigger={refreshTrigger} />
-      </div>
-
-      <h2>Existing Events</h2>
-      <button onClick={() => {
-        const csv = events.map(e => `${e.name},${e.date},${e.time},${e.location},${e.slots}`).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'events.csv';
-        a.click();
-      }}>Export Events as CSV</button>
-      {events.map(e => (
-        <div key={e.id} className="event-card">
-          <h3>{e.name}</h3>
-          <p><strong>Date:</strong> {e.date}</p>
-          <p><strong>Time:</strong> {e.time}</p>
-          <p><strong>Location:</strong> {e.location}</p>
-          <p><strong>Slots:</strong> {e.slots}</p>
-          <button onClick={() => deleteEvent(e.id)}>Delete</button>
+        {/* STAT CARDS */}
+        <div style={statsGridStyle}>
+          <div style={statCardStyle}>
+            <div style={iconCircleStyle}><CalIcon color="#3b82f6" /></div>
+            <div>
+              <div style={statLabelStyle}>Total Activities</div>
+              <div style={statValueStyle}>12</div>
+            </div>
+          </div>
+          <div style={statCardStyle}>
+            <div style={iconCircleStyle}><Users color="#10b981" /></div>
+            <div>
+              <div style={statLabelStyle}>Active Volunteers</div>
+              <div style={statValueStyle}>48</div>
+            </div>
+          </div>
         </div>
-      ))}
+
+        {/* CALENDAR SECTION */}
+        <section style={sectionCardStyle}>
+          <h2 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <CalIcon /> Activity Schedule
+          </h2>
+          <AdminCalendar refreshTrigger={refreshTrigger} />
+        </section>
+
+        <AddButtonForm 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          formData={formData}
+          onChange={handleInputChange}
+          onSubmit={submitEvent}
+        />
+      </main>
     </div>
   );
 }
+
+// STYLES
+const layoutStyle = { display: 'flex', minHeight: '100vh', backgroundColor: '#f8fafc' };
+const sidebarStyle = { width: '260px', backgroundColor: '#1e3a8a', color: '#fff', position: 'fixed', height: '100vh' };
+const navStyle = { display: 'flex', flexDirection: 'column', gap: '5px', padding: '10px' };
+const navItem = { display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 15px', borderRadius: '8px', cursor: 'pointer', transition: '0.2s' };
+const activeNavItem = { ...navItem, backgroundColor: '#2563eb' };
+const mainContentStyle = { flex: 1, marginLeft: '260px', padding: '40px' };
+const headerStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' };
+const statsGridStyle = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '40px' };
+const statCardStyle = { backgroundColor: '#fff', padding: '25px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '20px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' };
+const iconCircleStyle = { width: '50px', height: '50px', borderRadius: '12px', backgroundColor: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center' };
+const statLabelStyle = { color: '#64748b', fontSize: '0.9rem', fontWeight: '500' };
+const statValueStyle = { fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' };
+const primaryBtnStyle = { display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#2563eb', color: '#fff', border: 'none', padding: '12px 24px', borderRadius: '10px', fontWeight: '600', cursor: 'pointer' };
+const sectionCardStyle = { backgroundColor: '#fff', padding: '30px', borderRadius: '20px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' };
+
+
