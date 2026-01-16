@@ -3,8 +3,6 @@ package handlers
 import (
 	"database/sql"
 
-	"os"
-
 	"github.com/gin-gonic/gin"
 
 	"backend/auth"
@@ -48,21 +46,19 @@ func LoginHandler(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		var current_status bool = false
-		var domain string = "localhost"
+		// var current_status bool = false
 
-		if status := os.Getenv("STATUS"); status == "deployment" {
-			current_status = true
-			domain = ""
-		}
+		// if status := os.Getenv("STATUS"); status == "deployment" {
+		// 	current_status = true
+		// }
 
 		c.SetCookie(
 			"token",
 			tokenStr,
 			3600,
 			"/",
-			domain,
-			current_status,
+			"",
+			false,
 			true,
 		)
 

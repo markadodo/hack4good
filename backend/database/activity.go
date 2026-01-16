@@ -3,9 +3,12 @@ package database
 import (
 	"backend/models"
 	"database/sql"
+	"log"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/lib/pq"
 )
 
 func CreateActivity(db *sql.DB, input *models.CreateActivityInput) error {
@@ -33,7 +36,7 @@ func CreateActivity(db *sql.DB, input *models.CreateActivityInput) error {
 		input.Title,
 		input.Description,
 		input.Location,
-		input.MeetupLocation,
+		pq.Array(input.MeetupLocation),
 		input.StartTime,
 		input.EndTime,
 		input.WheelchairAccess,
@@ -61,7 +64,7 @@ func ReadActivityByID(db *sql.DB, id int64) (*models.Activity, error) {
 	WHERE id = $1
 	`
 	err := db.QueryRow(query, id).Scan(&activity.ID, &activity.Title, &activity.Description,
-		&activity.Location, &activity.MeetupLocation, &activity.StartTime, &activity.EndTime,
+		&activity.Location, pq.Array(&activity.MeetupLocation), &activity.StartTime, &activity.EndTime,
 		&activity.WheelchairAccess, &activity.PaymentRequired, &activity.ParticipantVacancy,
 		&activity.VolunteerVacancy, &activity.CreatedBy, &activity.CreatedAt)
 
@@ -101,7 +104,7 @@ func UpdateActivityByID(db *sql.DB, id int64, input *models.UpdateActivityInput)
 
 	if input.MeetupLocation != nil {
 		updates = append(updates, "meetup_location = $"+strconv.Itoa(counter))
-		args = append(args, *input.MeetupLocation)
+		args = append(args, pq.Array(*input.MeetupLocation))
 		counter += 1
 	}
 
@@ -334,6 +337,7 @@ func ReadActivity(db *sql.DB, limit int, offset int, sortBy string, order string
 	rows, err := db.Query(query, args...)
 
 	if err != nil {
+		log.Fatal("1")
 		return activities, err
 	}
 
@@ -343,7 +347,7 @@ func ReadActivity(db *sql.DB, limit int, offset int, sortBy string, order string
 		var activity models.Activity
 
 		if err := rows.Scan(&activity.ID, &activity.Title, &activity.Description, &activity.Location,
-			&activity.MeetupLocation, &activity.StartTime, &activity.EndTime,
+			pq.Array(&activity.MeetupLocation), &activity.StartTime, &activity.EndTime,
 			&activity.WheelchairAccess, &activity.PaymentRequired, &activity.ParticipantVacancy,
 			&activity.VolunteerVacancy, &activity.CreatedBy, &activity.CreatedAt); err != nil {
 			return activities, err
@@ -353,6 +357,7 @@ func ReadActivity(db *sql.DB, limit int, offset int, sortBy string, order string
 	}
 
 	if err := rows.Err(); err != nil {
+		log.Fatal("2")
 		return activities, err
 	}
 
