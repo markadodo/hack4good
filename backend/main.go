@@ -32,21 +32,12 @@ func main() {
 
 	router := gin.Default()
 
-	// Public Routes
-	// Authentication
-	router.POST("/auth/login", handlers.LoginHandler(db))
-	router.POST("/auth/register", handlers.CreateUserHandler(db))
-
-	// Activities - Read Only
-	router.GET("/activities", handlers.ReadActivityHandler(db))
-	router.GET("/activities/:activity_id", handlers.ReadActivityByIDHandler(db))
-
 	//Newly added:
 	// In backend/main.go, add a simple CORS middleware
 	router.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 		if c.Request.Method == "OPTIONS" {
@@ -56,6 +47,15 @@ func main() {
 		c.Next()
 	})
 	//return back to original code
+
+	// Public Routes
+	// Authentication
+	router.POST("/auth/login", handlers.LoginHandler(db))
+	router.POST("/auth/register", handlers.CreateUserHandler(db))
+
+	// Activities - Read Only
+	router.GET("/activities", handlers.ReadActivityHandler(db))
+	router.GET("/activities/:activity_id", handlers.ReadActivityByIDHandler(db))
 
 	// Protected Routes (Require Authentication)
 	protected := router.Group("/logged_in")

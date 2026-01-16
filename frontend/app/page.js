@@ -21,29 +21,42 @@ export default function AuthPage() {
     e.preventDefault();
     setError("");
 
-    // --- START OF TESTING BYPASS ---
-    // This allows you to log in with ANY username/password
-    console.log("Testing Mode: Bypassing Backend");
+    // // --- START OF TESTING BYPASS ---
+    // // This allows you to log in with ANY username/password
+    // console.log("Testing Mode: Bypassing Backend");
     
-    // You can even simulate different roles based on the username
-    if (formData.username === "admin") {
-      router.push("/admin");
-    } else if (formData.username === "volunteer") {
-      router.push("/volunteer");
-    } else {
-      router.push("/participant");
-    }
-    return; 
-    // --- END OF TESTING BYPASS ---
+    // // You can even simulate different roles based on the username
+    // if (formData.username === "admin") {
+    //   router.push("/admin");
+    // } else if (formData.username === "volunteer") {
+    //   router.push("/volunteer");
+    // } else {
+    //   router.push("/participant");
+    // }
+    // return; 
+    // // --- END OF TESTING BYPASS ---
 
     const endpoint = isRegistering ? "/auth/register" : "/auth/login";
     
     // Mapping registration data to match backend CreateUserInput
     const payload = isRegistering 
-      ? { ...formData, membership_type: 0 } 
-      : { username: formData.username, password: formData.password };
+      ? { 
+          username: formData.username, 
+          password: formData.password, 
+          role: formData.role, // Matches backend CreateUserInput struct
+          membership_type: 0 
+        } 
+      : { 
+          username: formData.username, 
+          password: formData.password 
+        };
 
     try {
+      // const response = await fetch("http://localhost:8080/auth/register", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload),
+      // });
       const response = await fetch(`http://localhost:8080${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -93,13 +106,23 @@ export default function AuthPage() {
           required
         />
 
+
         {isRegistering && (
           <div style={{ textAlign: "left", marginTop: "10px" }}>
-            <label>Select Role:</label>
-            <select name="role" value={formData.role} onChange={handleInputChange}>
+            <label style={{ fontSize: "0.8rem", fontWeight: "bold" }}>Select Role:</label>
+            <select 
+                name="role" 
+                value={formData.role} 
+                onChange={handleInputChange} style={{
+                width: "100%",
+                padding: "10px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                marginTop: "5px"
+            }}>
               <option value="participant">Participant</option>
               <option value="volunteer">Volunteer</option>
-              <option value="staff">Admin/Staff</option>
+              <option value="admin">Admin/Staff</option>
             </select>
           </div>
         )}

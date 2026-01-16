@@ -19,12 +19,16 @@ func CreateUserHandler(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		if input.Username == "" || input.Password == "" || input.Role == "" || input.MembershipType < 0 || input.MembershipType > 4 {
+		// if input.Username == "" || input.Password == "" || input.Role == "" || input.MembershipType < 0 || input.MembershipType > 4 {
+		// 	c.JSON(400, gin.H{"error": "Invalid fields"})
+		// 	return
+		// }
+		if input.Username == "" || input.Password == "" {
 			c.JSON(400, gin.H{"error": "Invalid fields"})
 			return
 		}
 
-		if input.Role != "participant" && input.Role != "staff" && input.Role != "volunteer" {
+		if input.Role != "participant" && input.Role != "admin" && input.Role != "volunteer" {
 			c.JSON(400, gin.H{"error": "Invalid role"})
 			return
 		}
