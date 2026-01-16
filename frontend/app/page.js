@@ -75,8 +75,9 @@ export default function AuthPage() {
         // Optionally clear the password field for security
         setFormData(prev => ({ ...prev, password: "" }));
       } else {
-        router.push(`/${data.role || formData.role}`);
-        //router.push(`/${formData.role}`); 
+        const targetRole = data.role === "staff" ? "admin" : data.role;
+        router.push(`/${targetRole}`);
+        
       }
     } catch (err) {
       setError(err.message);

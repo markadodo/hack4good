@@ -1,13 +1,14 @@
 'use client';
 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import eventsData from "../data/events";
 
 
 export default function AdminDashboard() {
  const [currentDate, setCurrentDate] = useState(new Date());
  const [events, setEvents] = useState(eventsData);
+ const [selectedEvent, setSelectedEvent] = useState(null); //state management for activity updates
 
 
  // Form States
@@ -28,19 +29,124 @@ export default function AdminDashboard() {
  ];
 
 
- const addEvent = () => {
-   if (!name || !date || !time) { alert("Please fill in the details"); return; }
-   const newEvent = { id: Date.now(), name, date, time, location, slots: parseInt(slots), registered: 0 };
-   setEvents([...events, newEvent]);
-   setName(""); setDate(""); setTime(""); setLocation(""); setSlots(1);
- };
+//  const addEvent = () => {
+//    if (!name || !date || !time) { alert("Please fill in the details"); return; }
+//    const newEvent = { id: Date.now(), name, date, time, location, slots: parseInt(slots), registered: 0 };
+//    setEvents([...events, newEvent]);
+//    setName(""); setDate(""); setTime(""); setLocation(""); setSlots(1);
+//  };
 
 
- const deleteEvent = (id) => {
-   if (confirm("Delete this activity?")) {
-     setEvents(events.filter((e) => e.id !== id));
-   }
- };
+//  const deleteEvent = (id) => {
+//    if (confirm("Delete this activity?")) {
+//      setEvents(events.filter((e) => e.id !== id));
+//    }
+//  };
+
+//new code for activity management: 
+useEffect(() => {
+  fetchActivities();
+}, []);
+
+const fetchActivities = async () => {
+  try {
+    const res = await fetch("http://localhost:8080/activities?limit=100");
+    const data = await res.json();
+    if (data.activities) {
+      // Map backend 'title' to frontend 'name' and 'start_time' to 'date' for UI compatibility
+      const formatted = data.activities.map(a => ({
+        id: a.id,
+        name: a.title,
+        // Extracting YYYY-MM-DD for the calendar filter logic
+        date: a.start_time.split('T')[0], 
+        time: a.start_time.split('T')[1].substring(0, 5),
+        location: a.location,
+        slots: a.participant_vacancy
+        // ...a,
+        // name: a.title,
+        // date: a.start_time.split('T')[0],
+        // time: a.start_time.split('T')[1].substring(0, 5)
+      }));
+      setEvents(formatted);
+    }
+  } catch (err) { console.error("Failed to fetch activities", err); }
+};
+
+const addEvent = async () => {
+  if (!name || !date || !time) { alert("Please fill in the details"); return; }
+
+  // Formatting backend StartTime and EndTime
+  // We combine date and time from the form.
+  const startDateTime = new Date(`${date}T${time}:00Z`);
+  const endDateTime = new Date(startDateTime.getTime() + 2 * 60 * 60 * 1000);
+  
+  const payload = {
+    title: name,
+    description: "Admin created activity",
+    location: location,
+    meetup_location: ["Main Entrance"],
+    start_time: new Date(`${date}T${time}:00Z`),
+    end_time: new Date(`${date}T23:59:00Z`),
+    participant_vacancy: parseInt(slots) || 1,
+    volunteer_vacancy: 5,
+    created_by: 1 // Replace with actual logged-in user ID
+  };
+
+  try { //updated 16011400
+    const res = await fetch("http://localhost:8080/logged_in/activities", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      alert("Activity added successfully!");
+      fetchActivities();
+      setName(""); setDate(""); setTime(""); setLocation(""); setSlots(1);
+    } else {
+      const errorData = await res.json();
+      alert(`Failed to add activity: ${errorData.error}`);
+    }
+  } catch (err) { 
+    console.error("Network error:", err);
+    alert("Could not connect to the server.");
+  }
+};
+
+const handleUpdate = async () => {
+  try {
+    const res = await fetch(`http://localhost:8080/logged_in/activities/${selectedEvent.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        title: selectedEvent.name,
+        location: selectedEvent.location,
+        participant_vacancy: parseInt(selectedEvent.slots)
+      })
+    });
+    if (res.ok) {
+      fetchActivities();
+      setSelectedEvent(null);
+    }
+  } catch (err) { alert("Update failed"); }
+};
+
+const handleDelete = async (id) => {
+  if (!confirm("Delete this activity permanentely?")) return;
+  try {
+    const res = await fetch(`http://localhost:8080/logged_in/activities/${id}`, {
+      method: "DELETE", 
+      credentials: "include"
+    });
+    if (res.ok) {
+      setEvents(events.filter(e => e.id !== id));
+      setSelectedEvent(null);
+    }
+  } catch (err) { alert("Delete failed"); }
+};
+
+//below is the older functional code 
 
 
  const days = [];
@@ -124,6 +230,37 @@ export default function AdminDashboard() {
            {days}
          </div>
        </main>
+       {/* Edit modal box */}
+       {selectedEvent && (
+        <div className="modal-overlay">
+          <div className="modal-content text-left">
+            <h2 className="text-blue-900">Edit Activity</h2>
+            <div className="modal-details">
+              <label>Activity Title</label>
+              <input 
+                value={selectedEvent.name} 
+                onChange={e => setSelectedEvent({...selectedEvent, name: e.target.value})} 
+              />
+              <label>Location</label>
+              <input 
+                value={selectedEvent.location} 
+                onChange={e => setSelectedEvent({...selectedEvent, location: e.target.value})} 
+              />
+              <label>Available Slots</label>
+              <input 
+                type="number" 
+                value={selectedEvent.slots} 
+                onChange={e => setSelectedEvent({...selectedEvent, slots: e.target.value})} 
+              />
+            </div>
+            <div className="modal-actions">
+              <button className="confirm-btn" onClick={handleUpdate}>Update</button>
+              <button className="remove-btn" onClick={() => handleDelete(selectedEvent.id)}>Delete</button>
+              <button className="cancel-btn" onClick={() => setSelectedEvent(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
      </div>
  );
 }

@@ -925,4 +925,403 @@
   flex-direction: column;
 }
  
+
+/**** instruction tab in participant dashboard ****/
+
+
+/* Instructions UI */
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto 20px;
+  }
+  
+  
+  .instructions-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  }
+  
+  
+  .instructions-toggle:hover {
+  background: white;
+  color: #1e40af;
+  }
+  
+  
+  .instructions-tab {
+  max-width: 800px;
+  margin: 0 auto 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: left;
+  animation: slideDown 0.4s ease-out;
+  }
+  
+  
+  .instructions-tab h3 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  }
+  
+  
+  .instructions-tab ul {
+  list-style: none;
+  padding: 0;
+  }
+  
+  
+  .instructions-tab li {
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+  }
+  
+  
+  .instructions-tab li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #facc15; /* Yellow bullet point */
+  font-weight: bold;
+  }
+  
+  
+  @keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+  }
+  
+  
+  
+  
+  /****** Step 1 Action Button inside Instructions ********/
+  .step-button-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 10px;
+  }
+  
+  
+  .step-action-btn {
+  background: #facc15;
+  color: #1e40af;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #ca8a04;
+  transition: all 0.1s;
+  }
+  
+  
+  .step-action-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #ca8a04;
+  }
+  
+  
+  /* Red Highlight Border Animation */
+  .highlight-red {
+  position: relative;
+  border-radius: 20px;
+  animation: pulseRedBorder 1s infinite alternate;
+  }
+  
+  
+  @keyframes pulseRedBorder {
+  from { box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.4); }
+  to { box-shadow: 0 0 20px 8px rgba(255, 0, 0, 0.8); }
+  }
+  
+  
+  /* Message Bubble */
+  .message-bubble {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 10;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  
+  
  
+  .message-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #ef4444 transparent transparent transparent;
+  }
+  
+  
+  
+  
+  /* Button in Instructions */
+  .step-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 12px;
+  }
+  
+  
+  .step-btn-yellow {
+  background: #facc15; /* Bright Yellow */
+  color: #1e3a8a;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #ca8a04;
+  min-width: 80px;
+  }
+  
+  
+  .step-btn-yellow:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #ca8a04;
+  }
+  
+  
+  /* The Pulsing Red Border Effect */
+  .active-highlight {
+  position: relative;
+  border-radius: 15px;
+  animation: pulseRed 0.8s infinite alternate;
+  z-index: 10;
+  }
+  
+  
+  @keyframes pulseRed {
+  from { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3); }
+  to { box-shadow: 0 0 20px 8px rgba(239, 68, 68, 0.7); }
+  }
+  
+  
+  /* Hint Bubble Styling */
+  .hint-bubble {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  z-index: 20;
+  pointer-events: none; /* Allows clicks to pass through to buttons below */
+  }
+  
+  
+  .hint-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #ef4444;
+  }
+  
+  
+  
+  
+  
+  
+  /*** button participant dashboard ***/
+  .active-highlight {
+  position: relative;
+  border-radius: 15px;
+  animation: pulseRed 0.8s infinite alternate;
+  z-index: 10;
+  }
+  
+  
+  @keyframes pulseRed {
+  from { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3); }
+  to { box-shadow: 0 0 20px 8px rgba(239, 68, 68, 0.7); }
+  }
+  
+  
+  .hint-bubble {
+  position: absolute;
+  top: -45px; /* Positioned above the slider */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 100;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  pointer-events: none; /* CRITICAL: This allows you to click the buttons 'through' the bubble */
+  }
+  
+  
+  .hint-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #ef4444;
+  }
+  
+  
+  /* the wrapper allows absolute positioning for the bubble */
+  .slider-wrapper {
+  position: relative;
+  padding: 20px 0;
+  transition: all 0.3s ease;
+  }
+  
+  
+  /* The Hint Bubble styling */
+  .hint-bubble {
+  position: absolute;
+  background-color: #ef4444; /* Bright Red */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 1rem;
+  white-space: nowrap;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  z-index: 999; /* Higher than all other elements */
+  pointer-events: none; /* Allows you to click the buttons 'through' it */
+  }
+  
+  
+  /* Specific position for  Bubble (above the slider) */
+  .step1-bubble {
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  }
+  
+  
+  /* Specific position for Bubble (above the calendar) */
+  .calendar-section .hint-bubble {
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  }
+  
+  
+  /* The little arrow pointing down from the bubble */
+  .hint-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: #ef4444 transparent transparent transparent;
+  }
+  
+  
+  /* The Red Pulse Animation */
+  .active-highlight {
+  border-radius: 20px;
+  animation: pulseBorder 1s infinite alternate;
+  }
+  
+  
+  @keyframes pulseBorder {
+  from { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0); }
+  to { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.6); }
+  }
+  
+  
+  
+  
+  
+  
+  /* 1. Ensure the Blue Panel doesn't cut off the bubble */
+  .blue-panel {
+  position: relative;
+  overflow: visible !important; /* This is the fix! It allows the bubble to 'stick out' */
+  z-index: 1; /* Base layer */
+  }
+  
+  
+  /* 2. Ensure the Slider Wrapper also allows overflow */
+  .slider-wrapper {
+  position: relative;
+  overflow: visible !important;
+  z-index: 10; /* Sits above the panel background */
+  }
+  
+  
+  /* 3. The Hint Bubble Styling */
+  .hint-bubble {
+  position: absolute;
+  background-color: #ef4444; /* Bright Red */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 800;
+  
+  
+  /* Layering Fixes */
+  z-index: 9999 !important; /* Extremely high to ensure it's on top of EVERYTHING */
+  pointer-events: none; /* Let clicks pass through to the buttons */
+  
+  
+  /* Centering logic */
+  top: -45px; /* Adjust this to move it higher/lower above the panel edge */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  }
+  
+  
+  /* 4. The Arrow Pointing Down */
+  .hint-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-top-color: #ef4444;
+  }
+  
