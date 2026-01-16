@@ -1,120 +1,130 @@
 'use client';
 
+
 import { useState } from "react";
-import axios from "axios";
-import { Users, Calendar as CalIcon, Plus, LayoutDashboard, Database, Download } from "lucide-react"; //npm install lucid-react
-import AddButtonForm from "./Addbuttonform";
-import AdminCalendar from "./AdminCalendar";
+import eventsData from "../data/events";
 
-export default function Admin() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [formData, setFormData] = useState({
-    title: "", description: "", location: "", meetup_location: "",
-    start_time: "", end_time: "", wheelchair_access: false,
-    payment_required: false, participant_vacancy: 0, volunteer_vacancy: 0,
-    created_by: 1
-  });
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
-  };
+export default function AdminDashboard() {
+ const [currentDate, setCurrentDate] = useState(new Date());
+ const [events, setEvents] = useState(eventsData);
 
-  const submitEvent = async () => {
-    try {
-      const payload = {
-        ...formData,
-        meetup_location: formData.meetup_location.split(",").map(s => s.trim()),
-        participant_vacancy: parseInt(formData.participant_vacancy),
-        volunteer_vacancy: parseInt(formData.volunteer_vacancy),
-        start_time: new Date(formData.start_time).toISOString(),
-        end_time: new Date(formData.end_time).toISOString(),
-      };
-      await axios.post("http://localhost:8080/logged_in/admin/activities", payload, { withCredentials: true });
-      setIsModalOpen(false);
-      setRefreshTrigger(prev => prev + 1);
-    } catch (err) { alert("Error creating activity"); }
-  };
 
-  return (
-    <div style={layoutStyle}>
-      {/* SIDEBAR */}
-      <aside style={sidebarStyle}>
-        <div style={{ padding: '20px', fontWeight: '800', fontSize: '1.2rem', color: '#fff' }}>HACK4GOOD</div>
-        <nav style={navStyle}>
-          <div style={activeNavItem}><LayoutDashboard size={20} /> Dashboard</div>
-          <div style={navItem} onClick={() => window.location.href = '/admin/users'}>
-            <Users size={20} /> Manage Accounts
-          </div>
-          <div style={navItem}><Database size={20} /> Database Logs</div>
-        </nav>
-      </aside>
+ // Form States
+ const [name, setName] = useState("");
+ const [date, setDate] = useState("");
+ const [time, setTime] = useState("");
+ const [location, setLocation] = useState("");
+ const [slots, setSlots] = useState(1);
 
-      {/* MAIN CONTENT */}
-      <main style={mainContentStyle}>
-        <header style={headerStyle}>
-          <div>
-            <h1 style={{ margin: 0, color: '#1e293b' }}>Admin Overview</h1>
-            <p style={{ color: '#64748b' }}>Manage your community activities and users.</p>
-          </div>
-          <button onClick={() => setIsModalOpen(true)} style={primaryBtnStyle}>
-            <Plus size={18} /> Create New Activity
-          </button>
-        </header>
 
-        {/* STAT CARDS */}
-        <div style={statsGridStyle}>
-          <div style={statCardStyle}>
-            <div style={iconCircleStyle}><CalIcon color="#3b82f6" /></div>
-            <div>
-              <div style={statLabelStyle}>Total Activities</div>
-              <div style={statValueStyle}>12</div>
-            </div>
-          </div>
-          <div style={statCardStyle}>
-            <div style={iconCircleStyle}><Users color="#10b981" /></div>
-            <div>
-              <div style={statLabelStyle}>Active Volunteers</div>
-              <div style={statValueStyle}>48</div>
-            </div>
-          </div>
-        </div>
+ // Calendar Logic
+ const year = currentDate.getFullYear();
+ const month = currentDate.getMonth();
+ const firstDayOfMonth = new Date(year, month, 1).getDay();
+ const daysInMonth = new Date(year, month + 1, 0).getDate();
+ const monthNames = ["January", "February", "March", "April", "May", "June",
+   "July", "August", "September", "October", "November", "December"
+ ];
 
-        {/* CALENDAR SECTION */}
-        <section style={sectionCardStyle}>
-          <h2 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <CalIcon /> Activity Schedule
-          </h2>
-          <AdminCalendar refreshTrigger={refreshTrigger} />
-        </section>
 
-        <AddButtonForm 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          formData={formData}
-          onChange={handleInputChange}
-          onSubmit={submitEvent}
-        />
-      </main>
-    </div>
-  );
+ const addEvent = () => {
+   if (!name || !date || !time) { alert("Please fill in the details"); return; }
+   const newEvent = { id: Date.now(), name, date, time, location, slots: parseInt(slots), registered: 0 };
+   setEvents([...events, newEvent]);
+   setName(""); setDate(""); setTime(""); setLocation(""); setSlots(1);
+ };
+
+
+ const deleteEvent = (id) => {
+   if (confirm("Delete this activity?")) {
+     setEvents(events.filter((e) => e.id !== id));
+   }
+ };
+
+
+ const days = [];
+ for (let i = 0; i < firstDayOfMonth; i++) {
+   days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
+ }
+
+
+ for (let d = 1; d <= daysInMonth; d++) {
+   const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+   const dayEvents = events.filter(e => e.date === dateStr);
+   days.push(
+       <div key={d} className="calendar-day admin-day">
+         <span className="day-number">{d}</span>
+         <div className="day-events">
+           {dayEvents.map(e => (
+               <div key={e.id} className="event-pill admin-pill" onClick={() => deleteEvent(e.id)}>
+                 🗑️ {e.name}
+               </div>
+           ))}
+         </div>
+       </div>
+   );
+ }
+
+
+ return (
+     <div className="dashboard-container">
+       {/* Integrated Admin Header */}
+       <header className="admin-header-v2">
+         <div className="admin-header-content">
+           <div className="admin-intro">
+             <h1>Admin Dashboard</h1>
+             <p>Create and manage the STEP programme schedule below.</p>
+           </div>
+
+
+           {/* Integrated Glass Form (No separate panel) */}
+           <div className="glass-form">
+             <div className="form-row">
+               <div className="field">
+                 <label>Activity Name</label>
+                 <input placeholder="Enter title..." value={name} onChange={e => setName(e.target.value)} />
+               </div>
+               <div className="field">
+                 <label>Date</label>
+                 <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+               </div>
+               <div className="field">
+                 <label>Time</label>
+                 <input type="time" value={time} onChange={e => setTime(e.target.value)} />
+               </div>
+               <div className="field">
+                 <label>Location</label>
+                 <input placeholder="Location..." value={location} onChange={e => setLocation(e.target.value)} />
+               </div>
+               <div className="field narrow">
+                 <label>Slots</label>
+                 <input type="number" value={slots} min="1" onChange={e => setSlots(e.target.value)} />
+               </div>
+               <button className="glass-submit-btn" onClick={addEvent}>
+                 <span>Add Activity</span>
+               </button>
+             </div>
+           </div>
+         </div>
+       </header>
+
+
+       {/* Calendar Section */}
+       <main className="calendar-section">
+         <div className="calendar-controls">
+           <button onClick={() => setCurrentDate(new Date(year, month - 1))}>&lt;</button>
+           <h2>{monthNames[month]} {year}</h2>
+           <button onClick={() => setCurrentDate(new Date(year, month + 1))}>&gt;</button>
+         </div>
+         <div className="calendar-grid">
+           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+               <div key={day} className="calendar-header-day">{day}</div>
+           ))}
+           {days}
+         </div>
+       </main>
+     </div>
+ );
 }
-
-// STYLES
-const layoutStyle = { display: 'flex', minHeight: '100vh', backgroundColor: '#f8fafc' };
-const sidebarStyle = { width: '260px', backgroundColor: '#1e3a8a', color: '#fff', position: 'fixed', height: '100vh' };
-const navStyle = { display: 'flex', flexDirection: 'column', gap: '5px', padding: '10px' };
-const navItem = { display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 15px', borderRadius: '8px', cursor: 'pointer', transition: '0.2s' };
-const activeNavItem = { ...navItem, backgroundColor: '#2563eb' };
-const mainContentStyle = { flex: 1, marginLeft: '260px', padding: '40px' };
-const headerStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' };
-const statsGridStyle = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '40px' };
-const statCardStyle = { backgroundColor: '#fff', padding: '25px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '20px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' };
-const iconCircleStyle = { width: '50px', height: '50px', borderRadius: '12px', backgroundColor: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center' };
-const statLabelStyle = { color: '#64748b', fontSize: '0.9rem', fontWeight: '500' };
-const statValueStyle = { fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' };
-const primaryBtnStyle = { display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#2563eb', color: '#fff', border: 'none', padding: '12px 24px', borderRadius: '10px', fontWeight: '600', cursor: 'pointer' };
-const sectionCardStyle = { backgroundColor: '#fff', padding: '30px', borderRadius: '20px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' };
-
 

@@ -1,65 +1,165 @@
 'use client';
 
+
 import { useState } from "react";
 import events from "../data/events";
 
-export default function Volunteer() {
-  const [selectedDate, setSelectedDate] = useState("");
-  const [registrations, setRegistrations] = useState([]);
-  const filteredEvents = selectedDate
-    ? events.filter((e) => e.date === selectedDate)
-    : [];
 
-  const toggleRegister = (id) => {
-    setRegistrations((prev) =>
-      prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]
-    );
-  };
+export default function VolunteerDashboard() {
+   const [currentDate, setCurrentDate] = useState(new Date());
 
-  return (
-    <div className="page">
-      <h1>Volunteer Dashboard</h1>
-      <div className="event-card">
-        <h2>Leaderboard</h2>
-        <p>Top Volunteers:</p>
-        <ul>
-          <li>Volunteer A: 10 events</li>
-          <li>Volunteer B: 8 events</li>
-          <li>You: {registrations.length} events</li>
-        </ul>
-      </div>
-      <label>Select date:</label>
-      <input
-        type="date"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
-      />
 
-      <div>
-        {selectedDate === "" && <p>Please select a date to view activities.</p>}
-        {filteredEvents.length === 0 && selectedDate !== "" && <p>No activities on this date.</p>}
-        {filteredEvents.map((event) => {
-          const isRegistered = registrations.includes(event.id);
-          const isFull = (event.registered || 0) >= event.slots;
-          return (
-            <div
-              key={event.id}
-              className={`event-card ${isRegistered ? "registered" : ""} ${isFull ? "full" : ""}`}
-            >
-              <h2>{event.name}</h2>
-              <p><strong>Time:</strong> {event.time}</p>
-              <p><strong>Location:</strong> {event.location}</p>
-              <p><strong>Slots left:</strong> {event.slots - (event.registered || 0)}</p>
-              <button
-                onClick={() => toggleRegister(event.id)}
-                disabled={isFull}
-              >
-                {isRegistered ? "Cancel" : isFull ? "Full" : "Register"}
-              </button>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+   // Modal States
+   const [volunteeringActivity, setVolunteeringActivity] = useState(null);
+   const [removingVolunteerBooking, setRemovingVolunteerBooking] = useState(null);
+
+
+   // Tracks confirmed volunteer slots: { "2026-01-15": ["Activity Name"], ... }
+   const [volunteerBookings, setVolunteerBookings] = useState({});
+
+
+   const year = currentDate.getFullYear();
+   const month = currentDate.getMonth();
+   const firstDayOfMonth = new Date(year, month, 1).getDay();
+   const daysInMonth = new Date(year, month + 1, 0).getDate();
+   const monthNames = ["January", "February", "March", "April", "May", "June",
+       "July", "August", "September", "October", "November", "December"
+   ];
+
+
+   // Logic to confirm volunteering
+   const confirmVolunteering = () => {
+       if (!volunteeringActivity) return;
+       setVolunteerBookings((prev) => ({
+           ...prev,
+           [volunteeringActivity.date]: [...(prev[volunteeringActivity.date] || []), volunteeringActivity.name]
+       }));
+       setVolunteeringActivity(null);
+       alert("Thank you for volunteering!");
+   };
+
+
+   // Logic to remove volunteering
+   const confirmRemoval = () => {
+       if (!removingVolunteerBooking) return;
+       setVolunteerBookings((prev) => {
+           const updated = { ...prev };
+           updated[removingVolunteerBooking.date] = updated[removingVolunteerBooking.date].filter(
+               name => name !== removingVolunteerBooking.activityName
+           );
+           if (updated[removingVolunteerBooking.date].length === 0) delete updated[removingVolunteerBooking.date];
+           return updated;
+       });
+       setRemovingVolunteerBooking(null);
+   };
+
+
+   const days = [];
+   for (let i = 0; i < firstDayOfMonth; i++) {
+       days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
+   }
+
+
+   for (let d = 1; d <= daysInMonth; d++) {
+       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+       const userVolunteerSlots = volunteerBookings[dateStr] || [];
+       const availableEvents = events.filter(e => e.date === dateStr);
+       const isBooked = userVolunteerSlots.length > 0;
+
+
+       days.push(
+           <div
+               key={d}
+               className={`calendar-day ${isBooked ? 'booked-day' : ''}`}
+               onClick={() => {
+                   if (isBooked) {
+                       setRemovingVolunteerBooking({ date: dateStr, activityName: userVolunteerSlots[0] });
+                   }
+               }}
+           >
+               <span className="day-number">{d}</span>
+               <div className="day-events">
+                   {userVolunteerSlots.map((name, i) => (
+                       <div key={`v-booked-${i}`} className="event-pill booked volunteer-pill">🤝 {name}</div>
+                   ))}
+                   {availableEvents.map(e => (
+                       !userVolunteerSlots.includes(e.name) && (
+                           <div key={e.id} className="event-pill available">{e.name}</div>
+                       )
+                   ))}
+               </div>
+           </div>
+       );
+   }
+
+
+   return (
+       <div className="dashboard-container">
+           {/* 1. Top Blue Panel (Volunteer Themed) */}
+           <div className="blue-panel volunteer-theme">
+               <h1>Volunteer Dashboard</h1>
+               <p>Your support makes a difference. Pick an activity to help out!</p>
+
+
+               {/* 2. Activity Slider */}
+               <div className="slider-wrapper">
+                   <div className="activity-slider">
+                       {events.map((event) => (
+                           <div key={event.id} className="slider-card">
+                               <h3>{event.name}</h3>
+                               <p>📍 {event.location} | 🕒 {event.time}</p>
+                               <button className="volunteer-btn" onClick={() => setVolunteeringActivity(event)}>Volunteer</button>
+                           </div>
+                       ))}
+                   </div>
+               </div>
+           </div>
+
+
+           {/* MODAL: Confirm Volunteering */}
+           {volunteeringActivity && (
+               <div className="modal-overlay">
+                   <div className="modal-content">
+                       <h2>Volunteer Confirmation</h2>
+                       <p>Are you sure you want to volunteer for <strong>{volunteeringActivity.name}</strong>?</p>
+                       <div className="modal-actions">
+                           <button className="cancel-btn" onClick={() => setVolunteeringActivity(null)}>Cancel</button>
+                           <button className="confirm-btn volunteer-confirm" onClick={confirmVolunteering}>Confirm Help</button>
+                       </div>
+                   </div>
+               </div>
+           )}
+
+
+           {/* MODAL: Cancel Volunteering */}
+           {removingVolunteerBooking && (
+               <div className="modal-overlay">
+                   <div className="modal-content border-red">
+                       <h2 className="text-red">Cancel Support</h2>
+                       <p>Remove your volunteer slot for: <strong>{removingVolunteerBooking.activityName}</strong>?</p>
+                       <div className="modal-actions">
+                           <button className="cancel-btn" onClick={() => setRemovingVolunteerBooking(null)}>Go Back</button>
+                           <button className="remove-btn" onClick={confirmRemoval}>Remove Slot</button>
+                       </div>
+                   </div>
+               </div>
+           )}
+
+
+           {/* 3. Calendar UI */}
+           <div className="calendar-section">
+               <div className="calendar-controls">
+                   <button onClick={() => setCurrentDate(new Date(year, month - 1))}>&lt;</button>
+                   <h2>{monthNames[month]} {year}</h2>
+                   <button onClick={() => setCurrentDate(new Date(year, month + 1))}>&gt;</button>
+               </div>
+               <div className="calendar-grid">
+                   {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                       <div key={day} className="calendar-header-day">{day}</div>
+                   ))}
+                   {days}
+               </div>
+           </div>
+       </div>
+   );
 }
