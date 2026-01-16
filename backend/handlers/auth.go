@@ -66,6 +66,6 @@ func LoginHandler(db *sql.DB) gin.HandlerFunc {
 			true,
 		)
 
-		c.JSON(200, gin.H{"user_id": userID})
+		c.JSON(200, gin.H{"user_id": userID, "role": role}) //added role
 	}
 }

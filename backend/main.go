@@ -41,6 +41,22 @@ func main() {
 	router.GET("/activities", handlers.ReadActivityHandler(db))
 	router.GET("/activities/:activity_id", handlers.ReadActivityByIDHandler(db))
 
+	//Newly added:
+	// In backend/main.go, add a simple CORS middleware
+	router.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+		c.Next()
+	})
+	//return back to original code
+
 	// Protected Routes (Require Authentication)
 	protected := router.Group("/logged_in")
 	protected.Use(middleware.JWTAuthorisation())
