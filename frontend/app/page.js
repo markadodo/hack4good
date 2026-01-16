@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -86,6 +87,16 @@ export default function AuthPage() {
 
   return (
     <div className="login-container">
+      <div style={{ marginBottom: "20px", display: "flex", justifyContent: "center" }}>
+        <Image 
+          src="/minds.jpg" // Make sure this matches the filename in your public folder exactly
+          alt="Mind"
+          width={300}   // Desired width in pixels
+          height={200}  // Desired height in pixels (adjust to match aspect ratio)
+          priority      // Loads the image immediately since it's above the fold
+          style={{ borderRadius: "8px", objectFit: "cover" }} // Optional styling
+        />
+      </div>
       <h1>{isRegistering ? "Create Account" : "Welcome"}</h1>
       <p>{isRegistering ? "Fill in your details to join" : "Enter your credentials to login"}</p>
 
