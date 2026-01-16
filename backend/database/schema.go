@@ -9,7 +9,7 @@ func InitDB(db *sql.DB) error {
 
 	schematables := `
 
-	CREATE TABLE users (
+	CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
 		username TEXT NOT NULL,
 		password_hash TEXT NOT NULL,
@@ -18,7 +18,7 @@ func InitDB(db *sql.DB) error {
 		created_at TIMESTAMPTZ NOT NULL
 	);
 
-	CREATE TABLE activities (
+	CREATE TABLE IF NOT EXISTS activities (
 		id SERIAL PRIMARY KEY,
 		title TEXT NOT NULL,
 		description TEXT NOT NULL,
@@ -34,7 +34,7 @@ func InitDB(db *sql.DB) error {
 		created_at TIMESTAMPTZ NOT NULL
 	);
 
-	CREATE TABLE registrations (
+	CREATE TABLE IF NOT EXISTS registrations (
 		id SERIAL PRIMARY KEY,
 		user_id INT REFERENCES users(id) ON DELETE CASCADE,
 		activity_id INT REFERENCES activities(id) ON DELETE CASCADE,
@@ -78,8 +78,8 @@ func InitDB(db *sql.DB) error {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	insertsystemUser := `
-	INSERT INTO users (id, username, password_hash, created_at, last_active)
-	VALUES (0, 'deleted_users', '!', NOW(), NOW())
+	INSERT INTO users (id, username, password_hash, role, membership_type, created_at)
+	VALUES (0, 'deleted_users', '!', 'staff', 4, NOW())
 	ON CONFLICT(id) DO NOTHING;
 	`
 

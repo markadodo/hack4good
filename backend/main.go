@@ -10,62 +10,67 @@ import (
 	"backend/database"
 	"backend/handlers"
 	"backend/middleware"
-	"context"
-	"database/sql"
 
 	_ "github.com/lib/pq"
-	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
-	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 func main() {
-	ctx := context.Background()
-
-	pgContainer, err := postgres.Run(ctx,
-		"postgres:16-alpine",
-		postgres.WithDatabase("testdb"),
-		postgres.WithUsername("test"),
-		postgres.WithPassword("test"),
-		testcontainers.WithWaitStrategy(
-			wait.ForLog("database system is ready to accept connections").
-				WithOccurrence(2),
-		),
-	)
-
-	connStr, err := pgContainer.ConnectionString(ctx, "sslmode=disable")
-
-	db, err := sql.Open("postgres", connStr)
-
+	db, err := database.ConnectDB()
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer db.Close()
 
-	fmt.Println("db working")
+	log.Println("Connected to Postgres")
 
 	err = database.InitDB(db)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("db created")
+	fmt.Println("DB created")
 
-	test := gin.Default()
+	router := gin.Default()
 
-	test.POST("/login", handlers.LoginHandler(db))
-	//test.GET("/topics/:topic_id/posts", handlers.ReadPostByTopicIDHandler(db))
-	test.POST("/users", handlers.CreateUserHandler(db))
-	//test.GET("/topics/:topic_id/posts/search", handlers.ReadPostBySearchQueryHandler(db))
-	//test.GET("/posts", handlers.ReadPostHandler(db))
+	// Public Routes
+	// Authentication
+	router.POST("/auth/login", handlers.LoginHandler(db))
+	router.POST("/auth/register", handlers.CreateUserHandler(db))
 
-	r := test.Group("/logged_in")
+	// Activities - Read Only
+	router.GET("/activities", handlers.ReadActivityHandler(db))
+	router.GET("/activities/:activity_id", handlers.ReadActivityByIDHandler(db))
 
-	r.Use(middleware.JWTAuthorisation())
+	// Protected Routes (Require Authentication)
+	protected := router.Group("/logged_in")
+	protected.Use(middleware.JWTAuthorisation())
 	{
-		r.POST("/activities", handlers.CreateActivityHandler(db))
+		// User Routes
+		protected.GET("/users/:user_id", handlers.ReadUserByIDHandler(db))
+		protected.PUT("/users/:user_id", handlers.UpdateUserByIDHandler(db))
+		protected.DELETE("/users/:user_id", handlers.DeleteUserByIDHandler(db))
+
+		// Activity Management Routes
+		protected.POST("/activities", handlers.CreateActivityHandler(db))
+		protected.PUT("/activities/:activity_id", handlers.UpdateActivityByIDHandler(db))
+		protected.DELETE("/activities/:activity_id", handlers.DeleteActivityByIDHandler(db))
+		protected.GET("/activities/:activity_id/owner", handlers.GetActivityOwnerHandler(db))
+		protected.GET("/activities/:activity_id/registrations/count", handlers.GetRegistrationCountByActivityIDHandler(db))
+
+		// Registration Routes
+		protected.POST("/registrations", handlers.CreateRegistrationHandler(db))
+		protected.GET("/registrations/:registration_id", handlers.ReadRegistrationByIDHandler(db))
+		protected.PUT("/registrations/:registration_id", handlers.UpdateRegistrationByIDHandler(db))
+		protected.DELETE("/registrations/:registration_id", handlers.DeleteRegistrationByIDHandler(db))
+
+		// User Registrations
+		protected.GET("/users/:user_id/registrations", handlers.ReadRegistrationsByUserIDHandler(db))
+		protected.GET("/users/:user_id/activities/:activity_id/registration", handlers.ReadRegistrationByUserIDAndActivityIDHandler(db))
+		protected.DELETE("/users/:user_id/activities/:activity_id/registration", handlers.DeleteRegistrationByUserIDAndActivityIDHandler(db))
+
+		// Activity Registrations
+		protected.GET("/activities/:activity_id/registrations", handlers.ReadRegistrationsByActivityIDHandler(db))
 	}
 
-	test.Run(":8080")
+	router.Run(":8080")
 }
