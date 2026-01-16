@@ -1,84 +1,120 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+ }
+ 
+ 
+ 
+ 
+ @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
-
-html,
-body {
+ }
+ 
+ 
+ 
+ 
+ html,
+ body {
   max-width: 100vw;
   overflow-x: hidden;
-}
-
-body {
+ }
+ 
+ 
+ 
+ 
+ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-* {
+ }
+ 
+ 
+ 
+ 
+ * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-}
-
-a {
+ }
+ 
+ 
+ 
+ 
+ a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
+ }
+ 
+ 
+ 
+ 
+ @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
-}
-
-/* Reset & base styles */
-body {
+ }
+ 
+ 
+ 
+ 
+ /* Reset & base styles */
+ body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f6f8;
   color: #333;
-}
-
-/* Navbar styling */
-.navbar {
+ }
+ 
+ 
+ 
+ 
+ /* Navbar styling */
+ .navbar {
   background-color: #1e40af;
   padding: 16px 32px;
   display: flex;
   gap: 24px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   align-items: center;
-}
-
-.navbar a {
+ }
+ 
+ 
+ 
+ 
+ .navbar a {
   color: white;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
-}
-
-.navbar a:hover {
+ }
+ 
+ 
+ 
+ 
+ .navbar a:hover {
   color: #facc15;
-}
-
-/* Page container */
-.page {
+ }
+ 
+ 
+ 
+ 
+ /* Page container */
+ .page {
   padding: 32px;
   max-width: 900px;
   margin: 0 auto;
-}
-
-/* Login page */
-.login-container {
+ }
+ 
+ 
+ 
+ 
+ /* Login page */
+ .login-container {
   max-width: 400px;
   margin: 80px auto;
   background-color: white;
@@ -86,20 +122,29 @@ body {
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.1);
   text-align: center;
-}
-
-.login-container h1 {
+ }
+ 
+ 
+ 
+ 
+ .login-container h1 {
   margin-bottom: 24px;
   color: #1e40af;
-}
-
-.login-container button {
+ }
+ 
+ 
+ 
+ 
+ .login-container button {
   width: 80%;
   margin: 12px 0;
-}
-
-/* Buttons */
-button {
+ }
+ 
+ 
+ 
+ 
+ /* Buttons */
+ button {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
@@ -110,22 +155,31 @@ button {
   background: linear-gradient(90deg, #1e3a8a, #2563eb);
   color: white;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-button:hover {
+ }
+ 
+ 
+ 
+ 
+ button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-
-button:disabled {
+ }
+ 
+ 
+ 
+ 
+ button:disabled {
   background: #ccc;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-}
-
-/* Input fields */
-input, select {
+ }
+ 
+ 
+ 
+ 
+ /* Input fields */
+ input, select {
   padding: 10px 14px;
   margin: 8px 0;
   border: 1px solid #ccc;
@@ -133,60 +187,1141 @@ input, select {
   font-size: 14px;
   width: 100%;
   box-sizing: border-box;
-}
-
-/* Event cards */
-.event-card {
+ }
+ 
+ 
+ 
+ 
+ /* Event cards */
+ .event-card {
   background-color: white;
   border-radius: 12px;
   padding: 20px;
   margin: 16px 0;
   box-shadow: 0 6px 12px rgba(0,0,0,0.05);
   transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.event-card:hover {
+ }
+ 
+ 
+ 
+ 
+ .event-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-}
-
-.registered {
+ }
+ 
+ 
+ 
+ 
+ .registered {
   border-left: 6px solid #2563eb;
-}
-
-.full {
+ }
+ 
+ 
+ 
+ 
+ .full {
   border-left: 6px solid #ef4444;
-}
-
-/* Labels */
-label {
+ }
+ 
+ 
+ 
+ 
+ /* Labels */
+ label {
   font-weight: 500;
   display: block;
   margin: 16px 0 8px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
+ }
+ 
+ 
+ 
+ 
+ /* Responsive design */
+ @media (max-width: 768px) {
   .navbar {
     padding: 12px 16px;
     flex-direction: column;
     gap: 12px;
   }
-
+ 
+ 
+ 
+ 
   .page {
     padding: 16px;
   }
-
+ 
+ 
+ 
+ 
   .login-container {
     margin: 40px 16px;
     padding: 24px;
   }
-
+ 
+ 
+ 
+ 
   .event-card {
     padding: 16px;
   }
-
+ 
+ 
+ 
+ 
   button {
     width: 100%;
   }
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ /* Participant Dashboard Layout */
+ .dashboard-container {
+  background-color: #f8fafc;
+  min-height: 100vh;
+ }
+ 
+ 
+ 
+ 
+ /* 1. Blue Panel & Heading */
+ .blue-panel {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+ }
+ 
+ 
+ 
+ 
+ .blue-panel h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+ }
+ 
+ 
+ 
+ 
+ /* 2. Activity Slider */
+ .slider-wrapper {
+  margin-top: 30px;
+  padding: 10px 0;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+ }
+ 
+ 
+ 
+ 
+ .slider-wrapper::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+ }
+ 
+ 
+ 
+ 
+ .activity-slider {
+  display: flex;
+  gap: 20px;
+  padding: 0 20px;
+  width: max-content;
+ }
+ 
+ 
+ 
+ 
+ .slider-card {
+  background: white;
+  color: #1e293b;
+  padding: 20px;
+  border-radius: 15px;
+  min-width: 250px;
+  text-align: left;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+ }
+ 
+ 
+ 
+ 
+ .slider-card:hover {
+  transform: translateY(-5px);
+ }
+ 
+ 
+ 
+ 
+ .register-btn {
+  background-color: #10b981;
+  width: 100%;
+  margin-top: 10px;
+ }
+ 
+ 
+ 
+ 
+ /* 3. Calendar UI */
+ .calendar-section {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+ }
+ 
+ 
+ 
+ 
+ .calendar-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+ }
+ 
+ 
+ 
+ 
+ .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background-color: #e2e8f0; /* Border color */
+  border: 1px solid #e2e8f0;
+ }
+ 
+ 
+ 
+ 
+ .calendar-header-day {
+  background-color: #f1f5f9;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  color: #475569;
+ }
+ 
+ 
+ 
+ 
+ .calendar-day {
+  background-color: white;
+  min-height: 120px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+ }
+ 
+ 
+ 
+ 
+ .day-number {
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 5px;
+ }
+ 
+ 
+ 
+ 
+ .event-pill {
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 3px solid #1e40af;
+ }
+ 
+ 
+ 
+ 
+ .calendar-day.empty {
+  background-color: #f8fafc;
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ /* Modal Popup Styles */
+ .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+ }
+ 
+ 
+ 
+ 
+ .modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+ }
+ 
+ 
+ 
+ 
+ .modal-content h2 {
+  color: #1e40af;
+  margin-bottom: 15px;
+ }
+ 
+ 
+ 
+ 
+ .modal-details {
+  margin: 20px 0;
+  text-align: left;
+ }
+ 
+ 
+ 
+ 
+ .modal-hint {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 5px;
+ }
+ 
+ 
+ 
+ 
+ .modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+ }
+ 
+ 
+ 
+ 
+ .confirm-btn {
+  flex: 2;
+  background-color: #1e40af;
+ }
+ 
+ 
+ 
+ 
+ .cancel-btn {
+  flex: 1;
+  background-color: #94a3b8;
+ }
+ 
+ 
+ 
+ 
+ /* Booked Calendar State */
+ .calendar-day.booked-day {
+  background-color: #eff6ff; /* Light blue tint for the box */
+  border: 2px solid #1e40af;
+ }
+ 
+ 
+ 
+ 
+ .event-pill.booked {
+  background-color: #1e40af; /* Dark Blue */
+  color: white;
+  border-left: none;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+ }
+ 
+ 
+ 
+ 
+ .event-pill.available {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-left: 3px solid #1e40af;
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ /* Add these to your existing CSS */
+ 
+ 
+ 
+ 
+ /* Make booked calendar days look clickable */
+ .calendar-day.booked-day {
+  cursor: pointer;
+  background-color: #eff6ff;
+  border: 2px solid #1e40af;
+  transition: transform 0.1s ease;
+ }
+ 
+ 
+ 
+ 
+ .calendar-day.booked-day:hover {
+  transform: scale(1.02);
+  background-color: #dbeafe;
+ }
+ 
+ 
+ 
+ 
+ /* Removal Modal styling */
+ .border-red {
+  border-top: 8px solid #ef4444;
+ }
+ 
+ 
+ 
+ 
+ .text-red {
+  color: #ef4444 !important;
+ }
+ 
+ 
+ 
+ 
+ .remove-btn {
+  flex: 2;
+  background-color: #ef4444;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+ }
+ 
+ 
+ 
+ 
+ .remove-btn:hover {
+  background-color: #dc2626;
+ }
+ 
+ 
+ 
+ 
+ .modal-hint {
+  margin: 10px 0;
+  font-size: 0.9rem;
+  color: #64748b;
+ }
+ 
+ 
+ 
+ 
+ /* Volunteer Specific UI Tweaks */
+ .volunteer-theme {
+  background: linear-gradient(135deg, #065f46 0%, #10b981 100%) !important; /* Emerald/Green theme */
+ }
+ 
+ 
+ .volunteer-btn {
+  background-color: #10b981;
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+ }
+ 
+ 
+ .volunteer-btn:hover {
+  background-color: #059669;
+ }
+ 
+ 
+ .volunteer-confirm {
+  background-color: #10b981 !important;
+ }
+ 
+ 
+ .volunteer-pill {
+  border-left: 3px solid #059669 !important;
+  background-color: #065f46 !important; /* Darker green for booked volunteer slots */
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ /* Admin Specific Design */
+ .admin-theme {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important; /* Dark Slate theme */
+ }
+ 
+ 
+ .form-panel {
+  max-width: 1200px;
+  margin: -30px auto 20px;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  z-index: 10;
+  position: relative;
+ }
+ 
+ 
+ .form-panel h2 {
+  margin-bottom: 20px;
+  color: #1e293b;
+  font-size: 1.2rem;
+ }
+ 
+ 
+ .admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  align-items: end;
+ }
+ 
+ 
+ .slot-input label {
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+  display: block;
+ }
+ 
+ 
+ .add-event-btn {
+  background-color: #1e293b;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+ }
+ 
+ 
+ .add-event-btn:hover {
+  background-color: #0f172a;
+ }
+ 
+ 
+ /* Admin Calendar Pills */
+ .admin-pill {
+  background-color: #f1f5f9;
+  color: #475569;
+  border-left: 3px solid #ef4444; /* Red border to indicate delete possibility */
+  cursor: pointer;
+  transition: all 0.2s;
+ }
+ 
+ 
+ .admin-pill:hover {
+  background-color: #fee2e2;
+  color: #ef4444;
+  transform: scale(1.05);
+ }
+ 
+ 
+ .admin-day {
+  border: 1px dashed #cbd5e1; /* Visual indicator for admin areas */
+ }
+ 
+ 
+ 
+ 
+ /* Update this specific class in app/globals.css */
+ 
+ 
+ .admin-day {
+  /* Changed from 1px dashed to 1px solid for smooth lines */
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  transition: background-color 0.2s ease;
+ }
+ 
+ 
+ /* Optional: Add a subtle hover effect to make the grid feel interactive */
+ .admin-day:hover {
+  background-color: #f8fafc;
+ }
+ 
+ 
+ .admin-header-v2 {
+   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+   padding: 50px 20px 80px 20px;
+   color: white;
+ }
+ 
+ .admin-header-content {
+   max-width: 1100px;
+   margin: 0 auto;
+ }
+ 
+  .admin-intro h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+    /* Removed the transparent fill that caused the text to vanish */
+    color: #ffffff; 
+    /* Optional: Re-add a subtle gradient that is safer */
+    background: linear-gradient(to right, #ffffff, #cbd5e1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* Ensure it's only transparent if the background-clip is supported */
+    transition: opacity 0.3s ease;
+  }
+
+  /* Ensure the paragraph text is readable against the dark background */
+  .admin-intro p {
+    color: #cbd5e1; /* Lighter gray for better contrast */
+    margin-bottom: 40px;
+    opacity: 0.9;
+  }
+ 
+ /* Glassmorphism Form */
+ .glass-form {
+   background: rgba(255, 255, 255, 0.05);
+   backdrop-filter: blur(10px);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   padding: 25px;
+   border-radius: 16px;
+ }
+ 
+ .form-row {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 15px;
+   align-items: flex-end;
+ }
+ 
+ .field {
+   flex: 1;
+   min-width: 150px;
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+ }
+ 
+ .field.narrow {
+   flex: 0 0 80px;
+   min-width: 80px;
+ }
+ 
+ .field label {
+   font-size: 0.75rem;
+   font-weight: 600;
+   color: #94a3b8;
+   text-transform: uppercase;
+   letter-spacing: 0.5px;
+ }
+ 
+ .field input {
+   background: rgba(15, 23, 42, 0.6);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   color: white;
+   padding: 10px 14px;
+   border-radius: 8px;
+   font-size: 0.9rem;
+   width: 100%;
+ }
+ 
+ .field input:focus {
+   outline: none;
+   border-color: #3b82f6;
+   background: rgba(15, 23, 42, 0.9);
+ }
+ 
+ .glass-submit-btn {
+   background: #3b82f6;
+   color: white;
+   padding: 11px 24px;
+   border-radius: 8px;
+   font-weight: 700;
+   border: none;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   height: 42px;
+ }
+ 
+ .glass-submit-btn:hover {
+   background: #2563eb;
+   transform: translateY(-2px);
+   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+ }
+ 
+ /* Calendar spacing adjust */
+ .calendar-section {
+   margin-top: -30px;
+   position: relative;
+   z-index: 2;
+ }
+
+
+ /* app/globals.css */
+
+/* Core Dashboard Layout */
+.dashboard-container {
+  background-color: #f8fafc;
+  min-height: 100vh;
 }
+
+/* Blue Header Panel */
+.blue-panel {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 0 0 30px 30px;
+}
+
+/* Professional Calendar Grid */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* This fixes the vertical listing */
+  gap: 1px;
+  background-color: #e2e8f0;
+  border: 1px solid #e2e8f0;
+  margin-top: 20px;
+}
+
+.calendar-day {
+  background-color: white;
+  min-height: 100px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+ 
+
+/**** instruction tab in participant dashboard ****/
+
+
+/* Instructions UI */
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto 20px;
+  }
+  
+  
+  .instructions-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  }
+  
+  
+  .instructions-toggle:hover {
+  background: white;
+  color: #1e40af;
+  }
+  
+  
+  .instructions-tab {
+  max-width: 800px;
+  margin: 0 auto 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: left;
+  animation: slideDown 0.4s ease-out;
+  }
+  
+  
+  .instructions-tab h3 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  }
+  
+  
+  .instructions-tab ul {
+  list-style: none;
+  padding: 0;
+  }
+  
+  
+  .instructions-tab li {
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+  }
+  
+  
+  .instructions-tab li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #facc15; /* Yellow bullet point */
+  font-weight: bold;
+  }
+  
+  
+  @keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+  }
+  
+  
+  
+  
+  /****** Step 1 Action Button inside Instructions ********/
+  .step-button-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 10px;
+  }
+  
+  
+  .step-action-btn {
+  background: #facc15;
+  color: #1e40af;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #ca8a04;
+  transition: all 0.1s;
+  }
+  
+  
+  .step-action-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #ca8a04;
+  }
+  
+  
+  /* Red Highlight Border Animation */
+  .highlight-red {
+  position: relative;
+  border-radius: 20px;
+  animation: pulseRedBorder 1s infinite alternate;
+  }
+  
+  
+  @keyframes pulseRedBorder {
+  from { box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.4); }
+  to { box-shadow: 0 0 20px 8px rgba(255, 0, 0, 0.8); }
+  }
+  
+  
+  /* Message Bubble */
+  .message-bubble {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 10;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  
+  
+ 
+  .message-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #ef4444 transparent transparent transparent;
+  }
+  
+  
+  
+  
+  /* Button in Instructions */
+  .step-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 12px;
+  }
+  
+  
+  .step-btn-yellow {
+  background: #facc15; /* Bright Yellow */
+  color: #1e3a8a;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #ca8a04;
+  min-width: 80px;
+  }
+  
+  
+  .step-btn-yellow:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #ca8a04;
+  }
+  
+  
+  /* The Pulsing Red Border Effect */
+  .active-highlight {
+  position: relative;
+  border-radius: 15px;
+  animation: pulseRed 0.8s infinite alternate;
+  z-index: 10;
+  }
+  
+  
+  @keyframes pulseRed {
+  from { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3); }
+  to { box-shadow: 0 0 20px 8px rgba(239, 68, 68, 0.7); }
+  }
+  
+  
+  /* Hint Bubble Styling */
+  .hint-bubble {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  z-index: 20;
+  pointer-events: none; /* Allows clicks to pass through to buttons below */
+  }
+  
+  
+  .hint-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #ef4444;
+  }
+  
+  
+  
+  
+  
+  
+  /*** button participant dashboard ***/
+  .active-highlight {
+  position: relative;
+  border-radius: 15px;
+  animation: pulseRed 0.8s infinite alternate;
+  z-index: 10;
+  }
+  
+  
+  @keyframes pulseRed {
+  from { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3); }
+  to { box-shadow: 0 0 20px 8px rgba(239, 68, 68, 0.7); }
+  }
+  
+  
+  .hint-bubble {
+  position: absolute;
+  top: -45px; /* Positioned above the slider */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 100;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  pointer-events: none; /* CRITICAL: This allows you to click the buttons 'through' the bubble */
+  }
+  
+  
+  .hint-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #ef4444;
+  }
+  
+  
+  /* the wrapper allows absolute positioning for the bubble */
+  .slider-wrapper {
+  position: relative;
+  padding: 20px 0;
+  transition: all 0.3s ease;
+  }
+  
+  
+  /* The Hint Bubble styling */
+  .hint-bubble {
+  position: absolute;
+  background-color: #ef4444; /* Bright Red */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 1rem;
+  white-space: nowrap;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  z-index: 999; /* Higher than all other elements */
+  pointer-events: none; /* Allows you to click the buttons 'through' it */
+  }
+  
+  
+  /* Specific position for  Bubble (above the slider) */
+  .step1-bubble {
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  }
+  
+  
+  /* Specific position for Bubble (above the calendar) */
+  .calendar-section .hint-bubble {
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  }
+  
+  
+  /* The little arrow pointing down from the bubble */
+  .hint-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: #ef4444 transparent transparent transparent;
+  }
+  
+  
+  /* The Red Pulse Animation */
+  .active-highlight {
+  border-radius: 20px;
+  animation: pulseBorder 1s infinite alternate;
+  }
+  
+  
+  @keyframes pulseBorder {
+  from { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0); }
+  to { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.6); }
+  }
+  
+  
+  
+  
+  
+  
+  /* 1. Ensure the Blue Panel doesn't cut off the bubble */
+  .blue-panel {
+  position: relative;
+  overflow: visible !important; /* This is the fix! It allows the bubble to 'stick out' */
+  z-index: 1; /* Base layer */
+  }
+  
+  
+  /* 2. Ensure the Slider Wrapper also allows overflow */
+  .slider-wrapper {
+  position: relative;
+  overflow: visible !important;
+  z-index: 10; /* Sits above the panel background */
+  }
+  
+  
+  /* 3. The Hint Bubble Styling */
+  .hint-bubble {
+  position: absolute;
+  background-color: #ef4444; /* Bright Red */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 800;
+  
+  
+  /* Layering Fixes */
+  z-index: 9999 !important; /* Extremely high to ensure it's on top of EVERYTHING */
+  pointer-events: none; /* Let clicks pass through to the buttons */
+  
+  
+  /* Centering logic */
+  top: -45px; /* Adjust this to move it higher/lower above the panel edge */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  }
+  
+  
+  /* 4. The Arrow Pointing Down */
+  .hint-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-top-color: #ef4444;
+  }
+  
