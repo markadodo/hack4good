@@ -32,17 +32,23 @@ func main() {
 
 	router := gin.Default()
 
+	routes := router.Group("/")
+
+	routes.Use(middleware.EnableCORS())
+
+	routes.OPTIONS("/*path")
+
 	// Public Routes
 	// Authentication
-	router.POST("/auth/login", handlers.LoginHandler(db))
-	router.POST("/auth/register", handlers.CreateUserHandler(db))
+	routes.POST("/auth/login", handlers.LoginHandler(db))
+	routes.POST("/auth/register", handlers.CreateUserHandler(db))
 
 	// Activities - Read Only
-	router.GET("/activities", handlers.ReadActivityHandler(db))
-	router.GET("/activities/:activity_id", handlers.ReadActivityByIDHandler(db))
+	routes.GET("/activities", handlers.ReadActivityHandler(db))
+	routes.GET("/activities/:activity_id", handlers.ReadActivityByIDHandler(db))
 
 	// Protected Routes (Require Authentication)
-	protected := router.Group("/logged_in")
+	protected := routes.Group("/logged_in")
 	protected.Use(middleware.JWTAuthorisation())
 	{
 		// User Routes
