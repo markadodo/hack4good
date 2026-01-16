@@ -643,44 +643,40 @@
  }
  
  
- 
- 
- /* Volunteer Specific UI Tweaks */
- .volunteer-theme {
-  background: linear-gradient(135deg, #065f46 0%, #10b981 100%) !important; /* Emerald/Green theme */
- }
- 
- 
- .volunteer-btn {
-  background-color: #10b981;
+/* Find this section in app/globals.css and replace it */
+
+/* Volunteer Specific UI Tweaks */
+.volunteer-theme {
+  /* Changed from Green to a nice Light Blue gradient */
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%) !important; 
+  color: white;
+}
+
+.volunteer-btn {
+  /* Updated to match the light blue theme */
+  background-color: #3b82f6;
   color: white;
   width: 100%;
   margin-top: 10px;
   padding: 12px;
   border-radius: 8px;
   font-weight: bold;
- }
- 
- 
- .volunteer-btn:hover {
-  background-color: #059669;
- }
- 
- 
- .volunteer-confirm {
-  background-color: #10b981 !important;
- }
- 
- 
- .volunteer-pill {
-  border-left: 3px solid #059669 !important;
-  background-color: #065f46 !important; /* Darker green for booked volunteer slots */
- }
- 
- 
- 
- 
- 
+}
+
+.volunteer-btn:hover {
+  background-color: #2563eb;
+}
+
+.volunteer-confirm {
+  /* Updated for the confirmation button in the modal */
+  background-color: #3b82f6 !important;
+}
+
+.volunteer-pill {
+  /* Updated the booked slot indicator on the calendar */
+  border-left: 3px solid #1d4ed8 !important;
+  background-color: #1e40af !important; /* Darker blue for visibility */
+}
  
  
  
@@ -1325,3 +1321,117 @@
   border-top-color: #ef4444;
   }
   
+
+  /* Profile Page Custom Styles */
+
+.profile-card {
+  position: relative;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Yellow Edit Button */
+.edit-btn-yellow {
+  background: #facc15 !important; /* Bright Yellow */
+  color: #1e3a8a !important;     /* Dark Blue text */
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #ca8a04;   /* Darker yellow shadow */
+  transition: all 0.1s;
+}
+
+.edit-btn-yellow:hover {
+  background: #fde047 !important;
+  transform: translateY(-1px);
+}
+
+.edit-btn-yellow:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 #ca8a04;
+}
+
+/* Styling for Read-Only Inputs */
+.read-only-input {
+  background-color: #f1f5f9 !important; /* Light grey */
+  color: #64748b !important;            /* Muted text */
+  border: 1px solid #e2e8f0 !important;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.save-btn {
+  background: linear-gradient(90deg, #10b981, #059669); /* Green for saving */
+}
+
+
+/* Professional Modal Layout */
+.professional-modal {
+  width: 90%;
+  max-width: 800px;
+  padding: 0 !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: #f8fafc;
+  padding: 20px 30px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 30px;
+  padding: 30px;
+}
+
+.modal-footer {
+  padding: 20px 30px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.pro-input, .pro-textarea {
+  border: 1px solid #cbd5e1 !important;
+  transition: border-color 0.2s;
+}
+
+.pro-input:focus {
+  border-color: #3b82f6 !important;
+  outline: none;
+}
+
+/* Button Refinement */
+.btn-update { background: #2563eb; color: white; padding: 10px 24px; border-radius: 8px; font-weight: 600; }
+.btn-delete { background: #fee2e2; color: #dc2626; padding: 10px 24px; border-radius: 8px; margin-right: 10px; font-weight: 600; border: 1px solid #fecaca; }
+.btn-cancel { background: transparent; color: #64748b; font-weight: 600; }
+
+.pro-toggle { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: #475569; padding: 8px 0; cursor: pointer; }
+
+.glass-form {
+  padding: 25px;
+  border-radius: 16px;
+  /* Ensure the form can expand vertically for two rows */
+  height: auto !important; 
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap; /* Allows fields to drop to next line on small screens */
+  gap: 15px;
+  align-items: flex-end;
+}
