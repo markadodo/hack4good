@@ -59,15 +59,44 @@ export default function VolunteerDashboard() {
        "July", "August", "September", "October", "November", "December"
    ];
 
-   const confirmVolunteering = () => {
-       if (!volunteeringActivity) return;
-       setVolunteerBookings((prev) => ({
-           ...prev,
-           [volunteeringActivity.date]: [...(prev[volunteeringActivity.date] || []), volunteeringActivity.name]
-       }));
-       setVolunteeringActivity(null);
-       alert("Thank you for volunteering!");
-   };
+   const confirmVolunteering = async() => {
+
+    //    if (!volunteeringActivity) return;
+    //    setVolunteerBookings((prev) => ({
+    //        ...prev,
+    //        [volunteeringActivity.date]: [...(prev[volunteeringActivity.date] || []), volunteeringActivity.name]
+    //    }));
+    if (!volunteeringActivity) return;
+
+        try {
+            const payload = {
+                user_id: 1, // Replace with actual logged-in user ID
+                activity_id: volunteeringActivity.id,
+                meetup_location: volunteeringActivity.location // Use activity location as meetup
+            };
+
+            const res = await fetch("http://localhost:8080/logged_in/registrations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                setVolunteerBookings((prev) => ({
+                    ...prev,
+                    [volunteeringActivity.date]: [...(prev[volunteeringActivity.date] || []), volunteeringActivity.name]
+                }));
+                alert("Thank you for volunteering!");
+            } else {
+                alert("Failed to save volunteer record.");
+            }
+        } catch (err) {
+            console.error("Error:", err);
+        }
+        setVolunteeringActivity(null);
+        alert("Thank you for volunteering!");
+    };
 
    const confirmRemoval = () => {
        if (!removingVolunteerBooking) return;

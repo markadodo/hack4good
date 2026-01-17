@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import eventsData from "../../data/events";
 import UserManagement from "./userManagement";
+import SignUps from "./signups";
 
 
 export default function AdminDashboard() {
@@ -33,6 +34,10 @@ const [paymentRequired, setPaymentRequired] = useState(false);
  const monthNames = ["January", "February", "March", "April", "May", "June",
    "July", "August", "September", "October", "November", "December"
  ];
+
+ const [showSignups, setShowSignups] = useState(null);
+
+ 
 
 
 //  const addEvent = () => {
@@ -392,6 +397,23 @@ const handleDelete = async (id) => {
               </div>
             </div>
             <div className="modal-actions" style={{ marginTop: '25px' }}>
+              <button 
+                className="glass-submit-btn" 
+                style={{ 
+                  background: '#0f172a', 
+                  marginRight: 'auto', 
+                  display: 'flex',           // Enable Flexbox
+                  justifyContent: 'center',  // Center horizontally
+                  alignItems: 'center',      // Center vertically
+                  textAlign: 'center',       // Ensure text lines are centered if wrapped
+                  padding: '0 15px',         // Horizontal padding for spacing
+                  minHeight: '42px',         // Matches your other buttons
+                  lineHeight: '1.2'          // Tightens space between wrapped lines
+                }}
+                onClick={() => setShowSignups(selectedEvent)}
+              >
+                View Sign Ups
+              </button>
               <button className="confirm-btn" onClick={handleUpdate}>Update</button>
               <button className="remove-btn" onClick={() => handleDelete(selectedEvent.id)}>Delete</button>
               <button className="cancel-btn" onClick={() => setSelectedEvent(null)}>Cancel</button>
@@ -403,7 +425,15 @@ const handleDelete = async (id) => {
       {/* USER MANAGEMENT MODAL */}
       {showUserMgmt && (
         <UserManagement onClose={() => setShowUserMgmt(false)} />
-      )}      
+      )} 
+
+      {/* SIGN UPS MODAL */}
+      {showSignups && (
+        <SignUps 
+            activity={showSignups} 
+            onClose={() => setShowSignups(null)} 
+        />
+      )}     
       </div>
  );
 }
