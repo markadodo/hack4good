@@ -135,6 +135,7 @@ const addEvent = async () => {
 
 const handleUpdate = async () => {
   try {
+    
     const res = await fetch(`http://localhost:8080/logged_in/activities/${selectedEvent.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -152,8 +153,14 @@ const handleUpdate = async () => {
     if (res.ok) {
       fetchActivities();
       setSelectedEvent(null);
+    } else {
+      const errorData = await res.json();
+      alert(`Update failed: ${errorData.error}`);
     }
-  } catch (err) { alert("Update failed"); }
+  } catch (err) { 
+      console.error("Update error:", err);
+      alert("Update failed: Could not connect to the server.");
+   }
 };
 
 const handleDelete = async (id) => {
@@ -165,9 +172,13 @@ const handleDelete = async (id) => {
     });
     if (res.ok) {
       setEvents(events.filter(e => e.id !== id));
+      fetchActivities();
       setSelectedEvent(null);
+    } else {
+      const errorData = await res.json();
+      alert(`Delete failed: ${errorData.error}`);
     }
-  } catch (err) { alert("Delete failed"); }
+  } catch (err) { alert("Delete failed: Network error"); }
 };
 
 //below is the older functional code 
@@ -377,89 +388,6 @@ const handleDelete = async (id) => {
     </div>
   </div>
 )}
-
-        {/* {selectedEvent && (
-          <div className="modal-overlay">
-            <div className="modal-content text-left" style={{ maxWidth: '500px', width: '90%' }}>
-              <h2 className="text-blue-900" style={{ marginBottom: '20px' }}>Edit Activity</h2>
-      
-          <div className="modal-details" style={{ maxHeight: '70vh', overflowY: 'auto', paddingRight: '10px' }}>
-              <label>Activity Title</label>
-              <input 
-                value={selectedEvent.name} 
-                onChange={e => setSelectedEvent({...selectedEvent, name: e.target.value})} 
-              />
-
-              
-              <label>Description</label>
-              <textarea 
-                rows="3"
-                placeholder="Describe the activity..."
-                value={selectedEvent.description || ""} 
-                onChange={e => setSelectedEvent({...selectedEvent, description: e.target.value})}
-                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc', marginBottom: '10px' }}
-              />
-
-              <label>Location</label>
-              <input 
-                value={selectedEvent.location} 
-                onChange={e => setSelectedEvent({...selectedEvent, location: e.target.value})} 
-              />
-
-            
-            <div style={{ display: 'flex', gap: '15px', marginBottom: '10px' }}>
-              <div style={{ flex: 1 }}>
-                <label>Participant Vacancy</label>
-                <input 
-                  type="number" 
-                  min="0"
-                  value={selectedEvent.slots} 
-                  onChange={e => setSelectedEvent({...selectedEvent, slots: e.target.value})} 
-                />
-              </div>
-              <div style={{ flex: 1 }}>
-                <label>Volunteer Vacancy</label>
-                <input 
-                  type="number" 
-                  min="0"
-                  value={selectedEvent.volunteer_vacancy || 0} 
-                  onChange={e => setSelectedEvent({...selectedEvent, volunteer_vacancy: e.target.value})} 
-                />
-              </div>
-            </div>
-
-            
-            <div className="field" style={{ flex: '1', minWidth: '250px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#94a3b8', marginBottom: '8px', display: 'block' }}>
-                REQUIREMENTS
-              </label>
-              <div style={{ display: 'flex', gap: '25px', alignItems: 'center', height: '42px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white', fontSize: '0.85rem', cursor: 'pointer' }}>
-                  <input 
-                    type="checkbox" 
-                    checked={wheelchairAccess} 
-                    onChange={e => setWheelchairAccess(e.target.checked)} 
-                  />
-                    Wheelchair Access
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white', fontSize: '0.85rem', cursor: 'pointer' }}>
-                  <input 
-                    type="checkbox" 
-                    checked={paymentRequired} 
-                    onChange={e => setPaymentRequired(e.target.checked)} 
-                  />
-                  Payment Required
-                </label>
-              </div>
-            </div>
-          <div className="modal-actions" style={{ marginTop: '25px' }}>
-            <button className="confirm-btn" onClick={handleUpdate}>Update</button>
-            <button className="remove-btn" onClick={() => handleDelete(selectedEvent.id)}>Delete</button>
-            <button className="cancel-btn" onClick={() => setSelectedEvent(null)}>Cancel</button>
-          </div>
-        </div>
-        </div>
-      )} */}
 
         {/* {selectedEvent && (
           <div className="modal-overlay">

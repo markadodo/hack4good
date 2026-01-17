@@ -11,6 +11,8 @@ export default function ParticipantDashboard() {
    const [showInstructions, setShowInstructions] = useState(false);
    const [isLoading, setIsLoading] = useState(true);
 
+   const [selectedActivity, setSelectedActivity] = useState(null);
+
    // Updated Fetch Logic
    useEffect(() => {
        const fetchActivities = async () => {
@@ -94,9 +96,21 @@ export default function ParticipantDashboard() {
                    {userBookings.map((name, i) => (
                        <div key={`booked-${i}`} className="event-pill booked">★ {name}</div>
                    ))}
-                   {availableEvents.map(e => (
-                       !userBookings.includes(e.name) && <div key={e.id} className="event-pill available">{e.name}</div>
-                   ))}
+                   {availableEvents.map(activity => (
+                        !userBookings.includes(activity.name) && (
+                            <div 
+                                key={activity.id} 
+                                className="event-pill available"
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevents clicking the day itself
+                                    // FIX: Pass the 'activity' object directly from the map
+                                    setSelectedActivity(activity); 
+                                }}
+                            > 
+                                {activity.name}  
+                            </div>
+                        )
+                    ))}
                </div>
            </div>
        );
@@ -203,6 +217,55 @@ export default function ParticipantDashboard() {
                </div>
                <div className="calendar-grid">{days}</div>
            </div>
+
+           {/* MODAL: Activity Details */}
+           {selectedActivity && (
+            <div className="modal-overlay" onClick={() => setSelectedActivity(null)}>
+                <div className="modal-content professional-modal" onClick={(e) => e.stopPropagation()}>
+                    <div className="modal-header">
+                        <h2>{selectedActivity.name}</h2>
+                        <span className="badge">Activity Details</span>
+                    </div>
+            
+                <div className="modal-body text-left">
+                    <div className="detail-section" style= {{backgroundColor: 'cornsilk', padding: '5px 10px', borderRadius: '8px'}}>
+                        <p><strong>Description:</strong></p>
+                        <p className="description-text">{selectedActivity.description || "No description provided."}</p>
+                    </div>
+
+                    <div className="detail-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', backgroundColor: 'olive', padding: '50px 10px', borderRadius: '8px' }}>
+                        <p>📍 <strong>Location:</strong> {selectedActivity.location}</p>
+                        <p>🕒 <strong>Time:</strong> {selectedActivity.time}</p>
+                        <p>🤝 <strong>Volunteer Vacancy:</strong> {selectedActivity.volunteer_vacancy}</p>
+                        <p>👥 <strong>Participant Slots:</strong> {selectedActivity.slots}</p>
+                    </div>
+
+                    <div className="requirements-row" style={{padding: '10px', background: '#f8fafc', borderRadius: '8px' , backgroundColor: 'cornsilk' }}>
+                        <p style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#64748b' }}>REQUIREMENTS</p>
+                        <div style={{ display: 'flex', gap: '20px' }}>
+                            <span>{selectedActivity.wheelchair_access ? "✅" : "❌"} Wheelchair Access</span>
+                            <span>{selectedActivity.payment_required ? "💰" : "🆓"} Payment Required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="modal-footer">
+                    <button className="cancel-btn" onClick={() => setSelectedActivity(null)}>Close</button>
+                    <button 
+                        className="confirm-btn volunteer-confirm" 
+                        onClick={() => {
+                            setVolunteeringActivity(selectedActivity);
+                            setSelectedActivity(null);
+                        }}
+                    >
+                        Volunteer for this
+                    </button>
+                </div>
+            </div>
+        </div>
+    )}
+
+           {/* / */}
        </div>
    );
 }
