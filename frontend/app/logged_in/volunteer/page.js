@@ -212,7 +212,7 @@ export default function VolunteerDashboard() {
                         <p className="description-text">{selectedActivity.description || "No description provided."}</p>
                     </div>
 
-                    <div className="detail-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', backgroundColor: 'olive', padding: '50px 10px', borderRadius: '8px'}}>
+                    <div className="detail-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', backgroundColor: 'Palegreen', padding: '50px 10px', borderRadius: '8px'}}>
                         <p>📍 <strong>Location:</strong> {selectedActivity.location}</p>
                         <p>🕒 <strong>Time:</strong> {selectedActivity.time}</p>
                         <p>🤝 <strong>Volunteer Vacancy:</strong> {selectedActivity.volunteer_vacancy}</p>

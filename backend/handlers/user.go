@@ -147,3 +147,20 @@ func DeleteUserByIDHandler(db *sql.DB) gin.HandlerFunc {
 		c.JSON(200, gin.H{"status": "User deleted successfully"})
 	}
 }
+
+func ReadAllUsersHandler(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		users, err := database.ReadAllUsers(db)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "Internal server error"})
+			return
+		}
+
+		if len(users) == 0 {
+			c.JSON(200, gin.H{"users": []models.User{}})
+			return
+		}
+
+		c.JSON(200, gin.H{"users": users})
+	}
+}

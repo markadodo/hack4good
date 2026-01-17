@@ -3,12 +3,14 @@
 
 import { useState, useEffect } from "react";
 import eventsData from "../../data/events";
+import UserManagement from "./userManagement";
 
 
 export default function AdminDashboard() {
  const [currentDate, setCurrentDate] = useState(new Date());
  const [events, setEvents] = useState(eventsData);
  const [selectedEvent, setSelectedEvent] = useState(null); //state management for activity updates
+ const [showUserMgmt, setShowUserMgmt] = useState(false); //user management 
 
 
  // Form States
@@ -222,8 +224,19 @@ const handleDelete = async (id) => {
       <header className="admin-header-v2">
         <div className="admin-header-content">
           <div className="admin-intro">
-            <h1>Admin Dashboard</h1>
+            <h1>Admin Dashboard
+              <button 
+                  className="glass-submit-btn" 
+                  style={{ background: 'royalblue', marginLeft: '100px' }}
+                  onClick={() => setShowUserMgmt(true)}
+              >
+                Manage User Accounts
+              </button>
+
+            </h1>
             <p>Create and manage the STEP programme schedule below.</p>
+            <h2 style={{ margin: '10px' }}> Add activity </h2>
+            
         </div>
 
         {/* Integrated Glass Form with Two Rows */}
@@ -354,98 +367,43 @@ const handleDelete = async (id) => {
                 </div>
               </div>
 
-        {/* RECTIFIED: Checkbox Fields now use selectedEvent state and dark text */}
-        <div className="field" style={{ flex: '1', minWidth: '250px', marginTop: '15px' }}>
-          <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#94a3b8', marginBottom: '8px', display: 'block' }}>
-            REQUIREMENTS
-          </label>
-          <div style={{ display: 'flex', gap: '25px', alignItems: 'center', height: '42px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#334155', fontSize: '0.85rem', cursor: 'pointer' }}>
-              <input 
-                type="checkbox" 
-                checked={selectedEvent.wheelchair_access || false} 
-                onChange={e => setSelectedEvent({...selectedEvent, wheelchair_access: e.target.checked})} 
-              />
-                Wheelchair Access
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#334155', fontSize: '0.85rem', cursor: 'pointer' }}>
-              <input 
-                type="checkbox" 
-                checked={selectedEvent.payment_required || false} 
-                onChange={e => setSelectedEvent({...selectedEvent, payment_required: e.target.checked})} 
-              />
-              Payment Required
-            </label>
-          </div>
-        </div>
-
-        <div className="modal-actions" style={{ marginTop: '25px' }}>
-          <button className="confirm-btn" onClick={handleUpdate}>Update</button>
-          <button className="remove-btn" onClick={() => handleDelete(selectedEvent.id)}>Delete</button>
-          <button className="cancel-btn" onClick={() => setSelectedEvent(null)}>Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
-        {/* {selectedEvent && (
-          <div className="modal-overlay">
-            <div className="modal-content text-left">
-              <h2 className="text-blue-900">Edit Activity</h2>
-              <div className="modal-details">
-                <label>Activity Title</label>
-                <input 
-                  value={selectedEvent.name} 
-                  onChange={e => setSelectedEvent({...selectedEvent, name: e.target.value})} 
-                />
-                
-                <label>Description</label>
-                <textarea 
-                  value={selectedEvent.description || ""} 
-                  onChange={e => setSelectedEvent({...selectedEvent, description: e.target.value})}
-                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
-                />
-                <label>Location</label>
-                <input 
-                  value={selectedEvent.location} 
-                  onChange={e => setSelectedEvent({...selectedEvent, location: e.target.value})} 
-                />
-                <label>Available Slots</label>
-                <input 
-                  type="number" 
-                  value={selectedEvent.slots} 
-                  onChange={e => setSelectedEvent({...selectedEvent, slots: e.target.value})} 
-                />
-                
-                <div style={{ marginTop: '10px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={selectedEvent.wheelchair_access || false}
-                      onChange={e => setSelectedEvent({...selectedEvent, wheelchair_access: e.target.checked})}
-                    />
+            {/* RECTIFIED: Checkbox Fields now use selectedEvent state and dark text */}
+            <div className="field" style={{ flex: '1', minWidth: '250px', marginTop: '15px' }}>
+              <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#94a3b8', marginBottom: '8px', display: 'block' }}>
+                REQUIREMENTS
+              </label>
+              <div style={{ display: 'flex', gap: '25px', alignItems: 'center', height: '42px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#334155', fontSize: '0.85rem', cursor: 'pointer' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={selectedEvent.wheelchair_access || false} 
+                    onChange={e => setSelectedEvent({...selectedEvent, wheelchair_access: e.target.checked})} 
+                  />
                     Wheelchair Access
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '5px' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={selectedEvent.payment_required || false}
-                      onChange={e => setSelectedEvent({...selectedEvent, payment_required: e.target.checked})}
-                    />
-                    Payment Required
-                  </label>
-                </div>
-
-              </div>
-              <div className="modal-actions">
-                <button className="confirm-btn" onClick={handleUpdate}>Update</button>
-                <button className="remove-btn" onClick={() => handleDelete(selectedEvent.id)}>Delete</button>
-                <button className="cancel-btn" onClick={() => setSelectedEvent(null)}>Cancel</button>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#334155', fontSize: '0.85rem', cursor: 'pointer' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={selectedEvent.payment_required || false} 
+                    onChange={e => setSelectedEvent({...selectedEvent, payment_required: e.target.checked})} 
+                  />
+                  Payment Required
+                </label>
               </div>
             </div>
+            <div className="modal-actions" style={{ marginTop: '25px' }}>
+              <button className="confirm-btn" onClick={handleUpdate}>Update</button>
+              <button className="remove-btn" onClick={() => handleDelete(selectedEvent.id)}>Delete</button>
+              <button className="cancel-btn" onClick={() => setSelectedEvent(null)}>Cancel</button>
+            </div>
           </div>
-        )} */}
+        </div>
+      </div>
+      )}
+      {/* USER MANAGEMENT MODAL */}
+      {showUserMgmt && (
+        <UserManagement onClose={() => setShowUserMgmt(false)} />
+      )}      
       </div>
  );
 }

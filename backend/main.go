@@ -51,6 +51,9 @@ func main() {
 	protected := routes.Group("/logged_in")
 	protected.Use(middleware.JWTAuthorisation())
 	{
+		//user management
+		protected.GET("/users", handlers.ReadAllUsersHandler(db))
+
 		// User Routes
 		protected.GET("/users/:user_id", handlers.ReadUserByIDHandler(db))
 		protected.PUT("/users/:user_id", handlers.UpdateUserByIDHandler(db))
@@ -76,6 +79,8 @@ func main() {
 
 		// Activity Registrations
 		protected.GET("/activities/:activity_id/registrations", handlers.ReadRegistrationsByActivityIDHandler(db))
+
+		//protected.GET("/users/:user_id", handlers.ReadUserByIDHandler(db))
 	}
 
 	router.Run(":8080")

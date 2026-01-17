@@ -154,3 +154,32 @@ func DeleteUserByID(db *sql.DB, id int64) (bool, error) {
 func GetUserOwnerByID(db *sql.DB, userID int64) (int64, error) {
 	return userID, nil
 }
+
+func ReadAllUsers(db *sql.DB) ([]models.User, error) {
+	var users []models.User
+
+	query := `
+    SELECT id, username, role, membership_type, created_at
+    FROM users
+    ORDER BY created_at DESC;
+    `
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var user models.User
+		if err := rows.Scan(&user.ID, &user.Username, &user.Role, &user.MembershipType, &user.CreatedAt); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
