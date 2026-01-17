@@ -19,11 +19,7 @@ export default function ParticipantDashboard() {
   const [volunteeringActivity, setVolunteeringActivity] = useState(null);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
-
-
-
-
-
+  const [clashData, setClashData] = useState(null);
 
 
   // Updated Fetch Logic
@@ -65,23 +61,14 @@ export default function ParticipantDashboard() {
 
 
 
-
-
-
-
-
   // Highlighting states for specific steps
   const [isStep1Active, setIsStep1Active] = useState(false);
   const [isStep3Active, setIsStep3Active] = useState(false);
-
-
 
   const triggerStep1 = () => {
       setIsStep1Active(true);
       setTimeout(() => setIsStep1Active(false), 4000);
   };
-
-
 
   const triggerStep3 = () => {
       setIsStep3Active(true);
@@ -101,24 +88,12 @@ export default function ParticipantDashboard() {
       days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
   }
 
-
-
-
-
-
-
-
   for (let d = 1; d <= daysInMonth; d++) {
       // dateStr will be in format YYYY-MM-DD
       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const userBookings = bookedEvents[dateStr] || [];
       const availableEvents = activities.filter(e => e.date === dateStr);
       const isBooked = userBookings.length > 0;
-
-
-
-
-
 
 
 
@@ -170,7 +145,40 @@ export default function ParticipantDashboard() {
       window.speechSynthesis.speak(utterance);
   };
 
+    const handleFinalRegistration = async (activity) => {
+        try {
+            const payload = {
+                user_id: userID(), // Extracted from your cookie utility
+                activity_id: activity.id,
+                meetup_location: "Main Entrance"
+            };
 
+            const res = await fetch("http://localhost:8080/logged_in/registrations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                alert("Successfully registered!");
+                // Update the calendar with a star icon
+                setBookedEvents(prev => ({
+                    ...prev,
+                    [activity.date]: [...(prev[activity.date] || []), activity.name]
+                }));
+                return true;
+            } else {
+                const errorData = await res.json();
+                alert(`Registration failed: ${errorData.error}`);
+                return false;
+            }
+        } catch (err) {
+            console.error("Network error:", err);
+            alert("Could not connect to the server.");
+            return false;
+        }
+    };
 
 
 
@@ -181,10 +189,34 @@ export default function ParticipantDashboard() {
       <div className="dashboard-container">
           <div className="blue-panel">
               <div className="header-flex">
-                  <h1>Participant Dashboard</h1>
-                  <button className="step-btn-yellow" onClick={() => setShowInstructions(!showInstructions)}>
+                <h1>Participant Dashboard</h1>
+                  {/* <button className="step-btn-yellow" onClick={() => setShowInstructions(!showInstructions)}>
                       {showInstructions ? "Hide Instructions" : "How to Use"}
-                  </button>
+                  </button> */}
+                <button 
+                  className="step-btn-yellow" 
+                  onClick={() => setShowInstructions(!showInstructions)}
+                    style={{
+                        display: 'flex',            // Use flexbox for alignment
+                        alignItems: 'center',       // Center icon and text vertically
+                        justifyContent: 'center',   // Center content horizontally
+                        gap: '12px',                // Space between icon and text
+                        padding: '12px 24px',       // Make the button larger
+                        fontSize: '1.1rem',         // Larger text
+                        fontWeight: 'bold',
+                        minWidth: '200px',          // Ensure consistent width
+                        borderRadius: '12px',
+                        transition: 'transform 0.2s' // Smooth interaction
+                    }}
+                >
+                    <img 
+                        src="/icons8-question-mark-64.png" 
+                        alt="Question Icon" 
+                        style={{ width: '28px', height: '28px' }} 
+                    />
+                    {showInstructions ? "Hide Instructions" : "How to Use"}
+                </button>
+
               </div>
 
 
@@ -290,6 +322,19 @@ export default function ParticipantDashboard() {
                       <div className="modal-actions">
                           <button className="cancel-btn" onClick={() => setRegisteringActivity(null)}>Cancel</button>
                           <button className="confirm-btn" onClick={async() => {
+                               const existingActivitiesOnDate = bookedEvents[registeringActivity.date] || [];
+                     
+                                if (existingActivitiesOnDate.length > 0) {
+                                    // Show the beautified custom modal instead of window.confirm
+                                    setClashData({
+                                        newActivity: registeringActivity,
+                                        existingCount: existingActivitiesOnDate.length
+                                    });
+                                    return; // Stop and wait for user to interact with the clash modal
+                                }
+                                handleFinalRegistration(registeringActivity);
+                                
+
                                try {
                                    const payload = {
                                        user_id: userID(), // You should replace this with the actual logged-in user's ID
@@ -401,7 +446,13 @@ export default function ParticipantDashboard() {
     <div className="modal-overlay" onClick={() => setSelectedActivity(null)}>
         <div className="modal-content pro-modal-v2" onClick={(e) => e.stopPropagation()}>
             <div className="pro-header-v2 blue-bg">
-                <span className="huge-icon-v2">ℹ️</span>
+                <img 
+                    src="/icons8-info.gif" 
+                    alt="Info Icon" 
+                    className="huge-icon-v2" 
+                    style={{ width: '80px', height: '80px', objectFit: 'contain' }} 
+                />
+                {/* <span className="huge-icon-v2">ℹ️</span> */}
                 <span className="label-v2">Activity Details</span>
             </div>
 
@@ -436,6 +487,47 @@ export default function ParticipantDashboard() {
             <div className="pro-footer-v2">
                 <button className="btn-v2 btn-sec" onClick={() => setSelectedActivity(null)}>Close</button>
                 <button className="btn-v2 btn-pri" onClick={() => { setRegisteringActivity(selectedActivity); setSelectedActivity(null); }}>Register for this</button>
+            </div>
+        </div>
+    </div>
+)}
+
+{clashData && (
+    <div className="modal-overlay">
+        <div className="modal-content pro-modal-v2" style={{ borderTop: '8px solid #facc15' }}>
+            <div className="pro-header-v2" style={{ backgroundColor: '#fefce8' }}>
+                <img 
+                    src="/icons8-question-mark-64.png" 
+                    alt="Warning" 
+                    style={{ width: '60px', height: '60px' }} 
+                />
+                <span className="label-v2" style={{ color: '#854d0e' }}>Schedule Alert</span>
+            </div>
+
+            <div className="modal-body" style={{ textAlign: 'center', padding: '30px' }}>
+                <h2 style={{ color: '#1e293b', marginBottom: '15px' }}>Potential Timing Clash!</h2>
+                <p className="friendly-text">
+                    You already have <strong>{clashData.existingCount} activity</strong> scheduled for this date.
+                </p>
+                <div className="pro-panel-v2" style={{ backgroundColor: '#fffbeb', border: '1px solid #fef08a', margin: '20px 0' }}>
+                    <p style={{ color: '#854d0e', fontSize: '0.95rem' }}>
+                        "Please take note that your timing of activities is happening on the same date, 
+                        please check the timing to avoid clashes."
+                    </p>
+                </div>
+                <p className="friendly-hint">Would you still like to proceed with the registration?</p>
+            </div>
+
+            <div className="pro-footer-v2">
+                <button className="btn-v2 btn-sec" onClick={() => setClashData(null)}>
+                    Go Back & Check
+                </button>
+                <button className="btn-v2 btn-pri" style={{ backgroundColor: '#facc15', color: '#854d0e' }} onClick={() => {
+                    handleFinalRegistration(clashData.newActivity);
+                    setClashData(null);
+                }}>
+                    Yes, Register Anyway
+                </button>
             </div>
         </div>
     </div>
