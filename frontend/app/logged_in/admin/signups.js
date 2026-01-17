@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from "react";
 
+const membership_type = ["tier 1", "tier 2", "tier 3", "tier 4"]
+
 export default function SignUps({ activity, onClose }) {
     const [registrations, setRegistrations] = useState([]);
     const [users, setUsers] = useState([]);
@@ -59,13 +61,12 @@ export default function SignUps({ activity, onClose }) {
                             <h3 style={{ color: '#059669', marginBottom: '15px' }}>🤝 Volunteers ({volunteers.length})</h3>
                             <table className="pro-table">
                                 <thead>
-                                    <tr><th>Name</th><th>Username</th></tr>
+                                    <tr><th>Name</th></tr>
                                 </thead>
                                 <tbody>
                                     {volunteers.map(reg => (
                                         <tr key={reg.id}>
                                             <td>{getUserById(reg.user_id).username}</td>
-                                            <td>{reg.meetup_location}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -77,13 +78,13 @@ export default function SignUps({ activity, onClose }) {
                             <h3 style={{ color: '#2563eb', marginBottom: '15px' }}>👥 Participants ({participants.length})</h3>
                             <table className="pro-table">
                                 <thead>
-                                    <tr><th>Name</th><th>Username</th></tr>
+                                    <tr><th>Name</th><th>membership type</th></tr>
                                 </thead>
                                 <tbody>
                                     {participants.map(reg => (
                                         <tr key={reg.id}>
                                             <td>{getUserById(reg.user_id).username}</td>
-                                            <td><span style={{ color: '#10b981' }}>Registered</span></td>
+                                            <td>{membership_type[getUserById(reg.user_id).membership_type]}</td>
                                         </tr>
                                     ))}
                                 </tbody>

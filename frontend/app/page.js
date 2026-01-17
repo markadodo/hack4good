@@ -149,7 +149,7 @@ export default function AuthPage() {
            }}>
              <option value="participant">Participant</option>
              <option value="volunteer">Volunteer</option>
-             <option value="admin">Admin/Staff</option>
+             <option value="staff">Admin/Staff</option>
            </select>
          </div>
        )}
