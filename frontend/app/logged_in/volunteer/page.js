@@ -94,9 +94,9 @@ export default function VolunteerDashboard() {
 
         try {
             const payload = {
-                user_id: userID(), // Replace with actual logged-in user ID
+                user_id: userID(),
                 activity_id: volunteeringActivity.id,
-                meetup_location: volunteeringActivity.location // Use activity location as meetup
+                meetup_location: volunteeringActivity.location 
             };
 
             const res = await fetch(`${apiUrl}/logged_in/registrations`, {

@@ -171,7 +171,7 @@ export default function ParticipantDashboard() {
     const handleFinalRegistration = async (activity) => {
         try {
             const payload = {
-                user_id: userID(), // Extracted from your cookie utility
+                user_id: 1, // Extracted from your cookie utility
                 activity_id: activity.id,
                 meetup_location: "Main Entrance"
             };
