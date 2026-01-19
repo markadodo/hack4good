@@ -5,11 +5,8 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 import { useState, useEffect } from "react";
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';')[0];
-  return null;
+function getToken() {
+  return localStorage.getItem("token");
 }
 
 function parseJwt(token) {
@@ -17,16 +14,23 @@ function parseJwt(token) {
   try {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(atob(base64));
-  } catch {
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0'))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (err) {
+    console.error("Failed to parse JWT:", err);
     return null;
   }
 }
 
-function userID(){
-  const token = getCookie("token");
+function userID() {
+  const token = getToken();
   const payload = parseJwt(token);
-  return payload.user_id;
+  return payload?.user_id || null; 
 }
 
 
@@ -171,7 +175,7 @@ export default function ParticipantDashboard() {
     const handleFinalRegistration = async (activity) => {
         try {
             const payload = {
-                user_id: 1, // Extracted from your cookie utility
+                user_id: userID(), // Extracted from your cookie utility
                 activity_id: activity.id,
                 meetup_location: "Main Entrance"
             };

@@ -1,12 +1,18 @@
+'use client';
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/");
+  };
   return (
     <nav className="navbar">
-      <Link href="/">Logout</Link>
-      {/* <Link href="/participant">Participant</Link>
-      <Link href="/volunteer">Volunteer</Link>
-      <Link href="/admin">Admin</Link> */}
+      <button onClick={handleLogout}>Logout</button>
       
       <Link href="/profile">Profile</Link>
     </nav>

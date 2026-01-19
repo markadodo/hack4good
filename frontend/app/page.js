@@ -90,6 +90,11 @@ export default function AuthPage() {
      } else {
        const targetRole = data.role === "staff" ? "admin" : data.role;
        router.push(`/logged_in/${targetRole}`);
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
       
      }
    } catch (err) {
