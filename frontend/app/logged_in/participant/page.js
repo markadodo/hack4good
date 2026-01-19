@@ -360,7 +360,7 @@ export default function ParticipantDashboard() {
                                     return; // Stop and wait for user to interact with the clash modal
                                 }
                                 handleFinalRegistration(registeringActivity);
-                                
+                                setRegisteringActivity(null);
 
                                try {
                                    const payload = {
