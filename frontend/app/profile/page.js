@@ -1,5 +1,5 @@
 'use client';
-
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 import { useState, useEffect } from "react";
 
 export default function Profile() {

@@ -1,5 +1,6 @@
 'use client';
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -65,7 +66,7 @@ export default function AuthPage() {
      //   headers: { "Content-Type": "application/json" },
      //   body: JSON.stringify(payload),
      // });
-     const response = await fetch(`http://localhost:8080${endpoint}`, {
+     const response = await fetch(`${apiUrl}${endpoint}`, {
        method: "POST",
        headers: { "Content-Type": "application/json" },
        credentials: "include",

@@ -1,5 +1,7 @@
 'use client';
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 
 import { useState, useEffect } from "react";
 import eventsData from "../../data/events";
@@ -61,7 +63,7 @@ useEffect(() => {
 
 const fetchActivities = async () => {
   try {
-    const res = await fetch("http://localhost:8080/activities?limit=99");
+    const res = await fetch(`${apiUrl}/activities?limit=99`);
     const data = await res.json();
     if (data.activities) {
       // Map backend 'title' to frontend 'name' and 'start_time' to 'date' for UI compatibility
@@ -110,7 +112,7 @@ const addEvent = async () => {
   };
 
   try { //updated 16011400
-    const res = await fetch("http://localhost:8080/logged_in/activities", {
+    const res = await fetch(`${apiUrl}/logged_in/activities`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -143,7 +145,7 @@ const addEvent = async () => {
 const handleUpdate = async () => {
   try {
     
-    const res = await fetch(`http://localhost:8080/logged_in/activities/${selectedEvent.id}`, {
+    const res = await fetch(`${apiUrl}/logged_in/activities/${selectedEvent.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -173,7 +175,7 @@ const handleUpdate = async () => {
 const handleDelete = async (id) => {
   if (!confirm("Delete this activity permanentely?")) return;
   try {
-    const res = await fetch(`http://localhost:8080/logged_in/activities/${id}`, {
+    const res = await fetch(`${apiUrl}/logged_in/activities/${id}`, {
       method: "DELETE", 
       credentials: "include"
     });

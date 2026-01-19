@@ -3,6 +3,7 @@ package middleware
 import (
 	"backend/auth"
 	"database/sql"
+	"os"
 
 	"strconv"
 
@@ -127,7 +128,12 @@ func CheckOwnershipByID(db *sql.DB, fetcher resourceFetcher) gin.HandlerFunc {
 func EnableCORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
+		frontend := os.Getenv("FRONTEND")
+		if frontend == "" {
+			frontend = "http://localhost:3000"
+		}
+
+		c.Header("Access-Control-Allow-Origin", frontend)
 		c.Header("Access-Control-Allow-Methods", "POST, GET, PATCH, PUT, DELETE, OPTIONS")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		c.Header("Access-Control-Allow-Credentials", "true")

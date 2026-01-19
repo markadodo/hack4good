@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export default function UserManagement({ onClose }) {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +27,7 @@ export default function UserManagement({ onClose }) {
         try {
             setIsLoading(true);
             const token = localStorage.getItem("token"); //new added
-            const res = await fetch("http://localhost:8080/logged_in/users", { 
+            const res = await fetch(`${apiUrl}/logged_in/users`, { 
                 headers: {
                     "Authorization": `Bearer ${token}` // new added
                 },
@@ -44,7 +44,7 @@ export default function UserManagement({ onClose }) {
     const handleDelete = async (id) => {
         if (!confirm("Are you sure you want to delete this account?")) return;
         try {
-            const res = await fetch(`http://localhost:8080/logged_in/users/${id}`, {
+            const res = await fetch(`${apiUrl}/logged_in/users/${id}`, {
                 method: "DELETE",
                 credentials: "include"
             });
@@ -56,8 +56,8 @@ export default function UserManagement({ onClose }) {
         e.preventDefault();
         const method = isCreating ? "POST" : "PUT";
         const url = isCreating 
-            ? "http://localhost:8080/auth/register"
-            : `http://localhost:8080/logged_in/users/${editingUser.id}`;
+            ? `${apiUrl}/auth/register`
+            : `${apiUrl}/logged_in/users/${editingUser.id}`;
 
         const payload = { ...formData };
         if (!isCreating && !payload.password) {

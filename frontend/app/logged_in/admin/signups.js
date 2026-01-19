@@ -1,6 +1,6 @@
 // frontend/app/logged-in/admin/signups.js
 'use client';
-
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 import { useState, useEffect } from "react";
 
 const membership_type = ["tier 1", "tier 2", "tier 3", "tier 4"]
@@ -18,11 +18,11 @@ export default function SignUps({ activity, onClose }) {
         try {
             setIsLoading(true);
             // Fetch registrations for this activity
-            const regRes = await fetch(`http://localhost:8080/logged_in/activities/${activity.id}/registrations?limit=99`, { credentials: "include" });
+            const regRes = await fetch(`${apiUrl}/logged_in/activities/${activity.id}/registrations?limit=99`, { credentials: "include" });
             const regData = await regRes.json();
 
             // Fetch all users to map IDs to names and roles
-            const userRes = await fetch("http://localhost:8080/logged_in/users", { credentials: "include" });
+            const userRes = await fetch(`${apiUrl}/logged_in/users`, { credentials: "include" });
             const userData = await userRes.json();
 
             if (regData.registrations) setRegistrations(regData.registrations);

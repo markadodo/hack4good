@@ -1,10 +1,33 @@
 
 
 'use client';
-
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 import { useState, useEffect } from "react";
-import { userID } from "../utils/cookie";
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';')[0];
+  return null;
+}
+
+function parseJwt(token) {
+  if (!token) return null;
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(base64));
+  } catch {
+    return null;
+  }
+}
+
+function userID(){
+  const token = getCookie("token");
+  const payload = parseJwt(token);
+  return payload.user_id;
+}
 
 
 export default function ParticipantDashboard() {
@@ -27,7 +50,7 @@ export default function ParticipantDashboard() {
       const fetchActivities = async () => {
           try {
               setIsLoading(true);
-              const res = await fetch("http://localhost:8080/activities?limit=99");
+              const res = await fetch(`${apiUrl}/activities?limit=99`);
               const data = await res.json();
 
 
@@ -153,7 +176,7 @@ export default function ParticipantDashboard() {
                 meetup_location: "Main Entrance"
             };
 
-            const res = await fetch("http://localhost:8080/logged_in/registrations", {
+            const res = await fetch(`${apiUrl}/logged_in/registrations`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -342,7 +365,7 @@ export default function ParticipantDashboard() {
                                        meetup_location: "Main Entrance" // Default location
                                    };
                           
-                                   const res = await fetch("http://localhost:8080/logged_in/registrations", {
+                                   const res = await fetch(`${apiUrl}/logged_in/registrations`, {
                                        method: "POST",
                                        headers: { "Content-Type": "application/json" },
                                        credentials: "include",
